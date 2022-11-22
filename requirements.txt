@@ -1,0 +1,6 @@
+yfinance
+matplotlib
+geopy
+requests
+urllib
+PIL
