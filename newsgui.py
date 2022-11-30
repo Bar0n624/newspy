@@ -14,8 +14,9 @@ Salient features include:
 '''
 from tkinter import *
 from time import strftime
-import os, errno, stock, webbrowser, weather, news, location
+import os,json
 import yfinance as yf
+import Currency_Wigide_manager, errno, stock, webbrowser, weather, news, location
 
 #Create Nominatim object for geolocation
 
@@ -24,7 +25,7 @@ flagdaynight = True
 colormode=-1
 
 #Default stock ticker list
-tickerlist = ["MSFT", "AAPL", "TSLA", "GOOGL", "GME"]
+tickerlist = ["MSFT", "AAPL", "TSLA", "GOOGL"]#, "GME"]
 
 
 def time(): 
@@ -82,20 +83,25 @@ if __name__=='__main__':  #this is the main function of the program
 
     #Frames
 
+    #Calender Frame
+    framecal = Frame(root)
+    framecal.grid(row=0,column=2,padx=(30,0), sticky="n")
+    framecal.configure(bg=bgcol)
     #frame for daytime
     framedaytime = Frame(root)
-    framedaytime.grid(row=0,column=1,padx=(130,0), sticky="w")
+    framedaytime.grid(row=0,column=3,padx=(2,0), sticky="w")
     framedaytime.configure(bg=bgcol)
 
     #frame for weather
     frameweather = Frame(root)
-    frameweather.grid(row=0,column=2,padx=(60,0))
+    frameweather.grid(row=0,column=0,padx=(5,0))
     frameweather.configure(bg=bgcol)
 
     #frame for stocks
     framestock = Frame(root)
     framestock.grid(row=1,column=0, sticky="n")
     framestock.configure(bg=bgcol)
+    
     framenews = Frame(root)
     framenews.grid(row=1, column=1, padx=(30,0), columnspan=2, sticky="n")
     framenews.configure(bg=bgcol)
@@ -146,5 +152,87 @@ if __name__=='__main__':  #this is the main function of the program
     #News data
     news.newsparse(framenews,bgcol,fgcol,country_code)
 
+    #currency converter and exchange rates
+    framecc = Frame(root)
+    framecc.grid(row=3,column=0)
+    framecc.configure(bg="white")
+    
+    # Menu bar for options and help
+    menuBar = Menu(root)
+    MENU1 = Menu(menuBar, tearoff=0)
+    menuBar.add_cascade(label='OPTION & HELP', menu=MENU1)
+    MENU1.add_command(label='Detailed Information',command=Currency_Wigide_manager.DETAILS)
+    root.config(menu = menuBar)
+
+    # variable to hold input amount
+    amount = StringVar()
+
+    # variable to hold from country
+    choice_from = StringVar()
+    choice_from.set("INR")
+
+    # variable to hold tp country
+    choice_to = StringVar()
+    choice_to.set("USD")
+
+    # variable to hold converted amt
+
+    final_amt = StringVar()
+    final_amt.set("0")
+
+    # opening the datafiles
+    with open('data.json', 'r', encoding="utf8") as fileObj:
+        choices = json.load(fileObj)
+
+
+    # From country name label and dropdown
+    Label(framecc, text="From: ",bg=bgcol).grid(row=0, column=0,padx=10)
+    MenuFrom = OptionMenu(framecc, choice_from, *choices)
+    MenuFrom.grid(row=0, column=1,padx=10)
+    
+    # To country name label and dropdown
+    Label(framecc, text="To: ",bg=bgcol).grid(row=0, column=2,padx=10)
+    MenuTo = OptionMenu(framecc, choice_to, *choices)
+    MenuTo.grid(row=0, column=3,padx=10)
+    
+    # Input amount label and dropdown
+    Label(framecc, text="Amount: ",bg=bgcol).grid(row=1, column=0)
+
+    # Click action on the entry box
+    def click(event):
+        if input_entry.get() == 'Currency value.':
+            input_entry.config(state=NORMAL)
+            input_entry.delete(0, END)
+        else:
+            input_entry.config(state=NORMAL)
+    # Unclick action on the entry box
+    def unclick(event):
+        if input_entry.get() == '':
+            input_entry.delete(0, END)
+            input_entry.insert(0, 'Currency value.')
+            input_entry.config(state=DISABLED)
+        else:
+            input_entry.config(state=DISABLED)
+
+    # Entry box for the amount
+    input_entry = Entry(framecc, textvariable=amount,width=15,bg=bgcol)
+    input_entry.grid(row=1, column=1, columnspan=2)
+
+    input_entry.insert(0, 'Currency value.')
+    input_entry.config(state=DISABLED)
+
+    # Binding Click and Unclick to the Entry box
+    input_entry.bind("<Button-1>", click)
+    input_entry.bind('<Leave>', unclick)
+
+    # Result output Label
+    result_label = Label(framecc,bg=bgcol)
+    result_label.grid(row=2, column=1, columnspan=2)
+
+    # Convert action button
+    Cal_button = Button(framecc, text="Convert",bg=bgcol,command=lambda:Currency_Wigide_manager.convert(amt=amount,result_L=result_label,toChoice=choice_to,fromChoice=choice_from))
+    Cal_button.grid(row=1, column=3)
+    
+    
     root.mainloop()
 

@@ -24,7 +24,7 @@ def newsparse(framenews,bgcol,fgcol,country_code): #function to process all the 
         rownum = 0 
         frametempNews = Frame(framenews, bg=bgcol) #creates a temp frame for news
         frametempNews.grid(column=0, sticky="w")
-        opener = urllib.request.build_opener() #creates urllib object in order to download images from the news article
+        opener = urllib.request.build_opener() #creates urllib3 object in order to download images from the news article
         opener.addheaders = [('User-agent', 'Mozilla/5.0')]
         urllib.request.install_opener(opener)
         try:
