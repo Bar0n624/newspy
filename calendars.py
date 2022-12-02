@@ -23,13 +23,14 @@ def LISTevents():
         if not (rem):
             messagebox.showerror(title="Error", message="No Plans.")
             E_Wid.destroy()
-        s = ""
-        for i in rem:
-            for j in rem[i]:
-                s += f"{i}:{j}\n"
+        else:
+            s = ""
+            for i in rem:
+                for j in rem[i]:
+                    s += f"{i}:{j}\n"
 
-        op_field.insert(END, s)
-        op_field.grid(row=1, column=0, columnspan=3)
+            op_field.insert(END, s)
+            op_field.grid(row=1, column=0, columnspan=3)
     Button(E_Wid, text="Go", command=listing).grid(row=0, column=3)
     E_Wid.mainloop()
 
