@@ -20,6 +20,7 @@ def LISTevents():
     op_field = Text(master=E_Wid, font="Courier 20")
 
     def listing():
+
         if not (rem):
             messagebox.showerror(title="Error", message="No Plans.")
             E_Wid.destroy()
@@ -58,7 +59,8 @@ def ADDevent(date):
     E_Wid.mainloop()
 
 
-Button(root, text="Add Event", command=lambda: ADDevent(cal.get_date())).pack(side=LEFT)
+Button(root, text="Add Event", command=lambda: ADDevent(
+    cal.get_date())).pack(side=LEFT)
 Button(root, text="List Event", command=LISTevents).pack(side=LEFT)
 
 root.mainloop()
