@@ -11,7 +11,7 @@ cal.pack(fill="both", expand=True)
 rem = {}
 
 
-def LISTevents():
+def LISTevents(date):
     E_Wid = Toplevel(master=root)
 
     Label(master=E_Wid, text="Date : ").grid(row=0, column=0)
@@ -19,20 +19,18 @@ def LISTevents():
     date_E.grid(row=0, column=2)
     op_field = Text(master=E_Wid, font="Courier 20")
 
-    def listing():
-
+    def listing(date):
         if not (rem):
             messagebox.showerror(title="Error", message="No Plans.")
             E_Wid.destroy()
         else:
             s = ""
-            for i in rem:
-                for j in rem[i]:
-                    s += f"{i}:{j}\n"
+            for j in rem[date]:
+                    s += f"{date}:{j}\n"
 
             op_field.insert(END, s)
             op_field.grid(row=1, column=0, columnspan=3)
-    Button(E_Wid, text="Go", command=listing).grid(row=0, column=3)
+    Button(E_Wid, text="Go", command= lambda: listing(date)).grid(row=0, column=3)
     E_Wid.mainloop()
 
 
@@ -40,7 +38,6 @@ def ADDevent(date):
     global rem
     E_Wid = Toplevel(master=root)
     Label(master=E_Wid, text=f"Date of the event {date}.").pack()
-
     E_Name = Entry(master=E_Wid)
     E_Name.pack()
 
@@ -59,8 +56,8 @@ def ADDevent(date):
     E_Wid.mainloop()
 
 
-Button(root, text="Add Event", command=lambda: ADDevent(
-    cal.get_date())).pack(side=LEFT)
-Button(root, text="List Event", command=LISTevents).pack(side=LEFT)
+Button(root, text="Add Event", command=lambda : ADDevent(
+    cal.selection_get())).pack(side=LEFT)
+Button(root, text="List Event", command= lambda : LISTevents(cal.selection_get())).pack(side=LEFT)
 
 root.mainloop()
