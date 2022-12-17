@@ -108,12 +108,12 @@ if __name__ == '__main__':  # this is the main function of the program
 
     # frame for weather
     frameweather = Frame(root)
-    frameweather.grid(row=0, column=2, padx=(5, 0), sticky="e")
+    frameweather.grid(row=0, column=0, padx=(5, 0), sticky="e")
     frameweather.configure(bg=bgcol)
 
     # frame for calander
     framecal = Frame(master=root)
-    framecal.grid(row=0, column=0, padx=(30, 0))
+    framecal.grid(row=0, column=2, padx=(30, 0))
     framecal.config(bg=bgcol)
 
     # frame for stocks
@@ -272,10 +272,11 @@ if __name__ == '__main__':  # this is the main function of the program
         E_Wid.title("Event listing.")
         Label(master=E_Wid, text="Date : ").grid(row=0, column=0)
         date_E = DateEntry(master=E_Wid)
-        date_E.grid(row=0, column=2)
-        op_field = Text(master=E_Wid, font="Courier 20")
+        date_E.grid(row=0, column=1)
+        op_field = Text(master=E_Wid, font="Courier 12")
 
         def listing(date):
+            op_field.config(state=NORMAL)
             op_field.delete("1.0", END)
             print(date)
             if (not (rem)) or (date not in rem) or (not (rem[date])):
@@ -287,10 +288,11 @@ if __name__ == '__main__':  # this is the main function of the program
                     s += f"{date}:{j}\n"
 
                 op_field.insert(END, s)
+                op_field.config(state=DISABLED)
                 op_field.grid(row=1, column=0, columnspan=3)
 
         Button(E_Wid, text="Go", command=lambda: listing(
-            date_E.get_date())).grid(row=0, column=3)
+            date_E.get_date())).grid(row=0, column=2)
         E_Wid.mainloop()
 
     def ADDevent(date):
