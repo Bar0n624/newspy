@@ -13,47 +13,60 @@ Salient features include:
     Automatic dark theme based on the time of the day to reduce strain on the eyes
 '''
 from tkinter import *
+from tkcalendar import *
+from tkinter import messagebox
 from time import strftime
-import os,json
+import os
+import json
 import yfinance as yf
-import Currency_Wigide_manager, errno, stock, webbrowser, weather, news, location
-
-#Create Nominatim object for geolocation
+import Currency_Wigide_manager
+import errno
+import stock
+import webbrowser
+import weather
+import news
+import location
+from cal2 import *
+# Create Nominatim object for geolocation
 
 stockdownloadlist = {}
 flagdaynight = True
-colormode=-1
+colormode = -1
 
-#Default stock ticker list
-tickerlist = ["MSFT", "AAPL", "TSLA", "GOOGL"]#, "GME"]
+# Default stock ticker list
+tickerlist = []  # "MSFT", "AAPL", "TSLA", "GOOGL"]#, "GME"]
 
 
-def time(): 
-    currenttime = strftime('%I:%M:%S %p') 
-    timeLabel.configure(text = currenttime)  
-    timeLabel.after(1000,time)
+def time():
+    currenttime = strftime('%I:%M:%S %p')
+    timeLabel.configure(text=currenttime)
+    timeLabel.after(1000, time)
+
 
 def greeting():
     currenthour = int(strftime('%H'))
-    #Greeting based on the time of the day
-    if 5<=currenthour<12:
+    # Greeting based on the time of the day
+    if 5 <= currenthour < 12:
         greetLabel.configure(text="Good morning")
-    elif 12<=currenthour<17:
+    elif 12 <= currenthour < 17:
         greetLabel.configure(text="Good afternoon")
-    elif 17<=currenthour<=23 or 0<=currenthour<5:
+    elif 17 <= currenthour <= 23 or 0 <= currenthour < 5:
         greetLabel.configure(text="Good evening")
 
+
 def date():
-    #sets date
+    # sets date
     currentdate = strftime('%A, %d %B %Y')
-    dateLabel.configure(text = currentdate)
+    dateLabel.configure(text=currentdate)
+
 
 def open_site(url):
-    #function to open a url in browser
+    # function to open a url in browser
     webbrowser.open(url, new=0)
 
+
 def mkdir_p(path):
-    #creates path for assets and other important stuff
+    # creates path for assets and other important stuff
     try:
         os.makedirs(path)
     except OSError as exc:
@@ -61,108 +74,122 @@ def mkdir_p(path):
             pass
         else:
             raise
-if __name__=='__main__':  #this is the main function of the program
-    print ("Collecting data from the internet. Please Wait...")
+
+
+if __name__ == '__main__':  # this is the main function of the program
+    print("Collecting data from the internet. Please Wait...")
     mkdir_p("assets")
-    city_name, country_name, country_code = location.location() #gets information from the location file
+    # gets information from the location file
+    city_name, country_name, country_code = location.location()
     hour = int(strftime('%H'))
 
-    if ((0<=hour<6 or 18<hour<=23) and colormode==0) or colormode==1: #function to change between lightmode and dark mode depending upon user preferences and time
+    # function to change between lightmode and dark mode depending upon user preferences and time
+    if ((0 <= hour < 6 or 18 < hour <= 23) and colormode == 0) or colormode == 1:
         bgcol = "#303032"
         fgcol = "white"
-        flagdaynight=False
+        flagdaynight = False
     else:
-        bgcol="white"
+        bgcol = "white"
         fgcol = "black"
 
-    #Tkinter boilerplate shit
+    # Tkinter boilerplate shit
     root = Tk()
     root.geometry("1400x750")
     root.title("NEWS")
     root.configure(bg=bgcol)
 
-    #Frames
+    # Frames
 
-    #Calender Frame
-    framecal = Frame(root)
-    framecal.grid(row=0,column=2,padx=(30,0), sticky="n")
-    framecal.configure(bg=bgcol)
-    #frame for daytime
+    # frame for daytime
     framedaytime = Frame(root)
-    framedaytime.grid(row=0,column=3,padx=(2,0), sticky="w")
+    framedaytime.grid(row=0, column=1, padx=(5, 0), sticky="n")
     framedaytime.configure(bg=bgcol)
 
-    #frame for weather
+    # frame for weather
     frameweather = Frame(root)
-    frameweather.grid(row=0,column=0,padx=(5,0))
+    frameweather.grid(row=0, column=2, padx=(5, 0), sticky="e")
     frameweather.configure(bg=bgcol)
 
-    #frame for stocks
-    framestock = Frame(root)
-    framestock.grid(row=1,column=0, sticky="n")
-    framestock.configure(bg=bgcol)
-    
-    framenews = Frame(root)
-    framenews.grid(row=1, column=1, padx=(30,0), columnspan=2, sticky="n")
-    framenews.configure(bg=bgcol)
-    
-    
-    #Widgets
+    # frame for calander
+    framecal = Frame(master=root)
+    framecal.grid(row=0, column=0, padx=(30, 0))
+    framecal.config(bg=bgcol)
 
-    #Greetings and date time
-    greetLabel = Label(framedaytime, font=("bahnschrift",20), bg=bgcol, fg=fgcol)
+    # frame for stocks
+    framestock = Frame(root)
+    framestock.grid(row=1, column=0, sticky="n")
+    framestock.configure(bg=bgcol)
+
+    framenews = Frame(root)
+    framenews.grid(row=1, column=1, padx=(30, 0), columnspan=2, sticky="n")
+    framenews.configure(bg=bgcol)
+
+    # Widgets
+
+    # Greetings and date time
+    greetLabel = Label(framedaytime, font=(
+        "bahnschrift", 20), bg=bgcol, fg=fgcol)
     greeting()
 
-    timeLabel = Label(framedaytime, font=("century gothic",40), bg=bgcol, fg=fgcol)
+    timeLabel = Label(framedaytime, font=(
+        "century gothic", 40), bg=bgcol, fg=fgcol)
     time()
 
-    dateLabel = Label(framedaytime, font =("bahnscrift", 15), bg=bgcol, fg=fgcol)
+    dateLabel = Label(framedaytime, font=(
+        "bahnscrift", 15), bg=bgcol, fg=fgcol)
     date()
 
-    greetLabel.grid(row = 0, column = 1,sticky = 'w')
-    timeLabel.grid(row = 1, column=1, sticky='w')
-    dateLabel.grid(row = 2, column = 1, sticky = 'w')
+    greetLabel.grid(row=0, column=1, sticky='w')
+    timeLabel.grid(row=1, column=1, sticky='w')
+    dateLabel.grid(row=2, column=1, sticky='w')
 
-    #Weather information is set in the next few lines of code using information from the weather file
+    # Weather information is set in the next few lines of code using information from the weather file
 
-    weathertextLabel = Label(frameweather, text = "Weather", font =("century gothic bold", 25), bg=bgcol, fg=fgcol)
-    weatherLabel = Label(frameweather, font =("century gothic", 20), bg=bgcol, fg=fgcol)
+    weathertextLabel = Label(frameweather, text="Weather", font=(
+        "century gothic bold", 25), bg=bgcol, fg=fgcol)
+    weatherLabel = Label(frameweather, font=(
+        "century gothic", 20), bg=bgcol, fg=fgcol)
     weatherLabel.configure(text=weather.weather(city_name), compound="right")
 
-    locLabel = Label(frameweather, text = "%s, %s"%(city_name,country_name), font =("century gothic", 15), bg=bgcol, fg=fgcol)
+    locLabel = Label(frameweather, text="%s, %s" % (
+        city_name, country_name), font=("century gothic", 15), bg=bgcol, fg=fgcol)
 
-    weatherim = PhotoImage(file="assets/weather.png") #loads the weather asset png
+    # loads the weather asset png
+    weatherim = PhotoImage(file="assets/weather.png")
     weatherLabel.configure(image=weatherim)
 
-    weathertextLabel.grid(row=0,column=1,sticky="w")
-    weatherLabel.grid(row = 1,column=1,sticky="nw")
+    weathertextLabel.grid(row=0, column=1, sticky="w")
+    weatherLabel.grid(row=1, column=1, sticky="nw")
 
-    locLabel.grid(row=0,column=3,sticky="w", padx=(30,0))
+    locLabel.grid(row=0, column=3, sticky="w", padx=(30, 0))
 
-    #Stock information
-    stockLabel = Label(framestock, text = "Live Stock Info", font =("century gothic bold", 20), bg=bgcol, fg=fgcol)
-    stockLabel.grid(row=0,column=0,columnspan=2, sticky="n", pady=(30,0))
+    # Stock information
+    stockLabel = Label(framestock, text="Live Stock Info", font=(
+        "century gothic bold", 20), bg=bgcol, fg=fgcol)
+    stockLabel.grid(row=0, column=0, columnspan=2, sticky="n", pady=(30, 0))
 
     rownumgraph = 1
-    print (f"Collecting data for {len(tickerlist)} stock ticker(s)...")
+    print(f"Collecting data for {len(tickerlist)} stock ticker(s)...")
 
-    #calls stock function within stock file to load stock data into the stock labels
-    stock.stock(tickerlist,framestock,bgcol,fgcol,yf,stockdownloadlist,flagdaynight,rownumgraph)
+    # calls stock function within stock file to load stock data into the stock labels
+    stock.stock(tickerlist, framestock, bgcol, fgcol, yf,
+                stockdownloadlist, flagdaynight, rownumgraph)
 
-    #News data
-    news.newsparse(framenews,bgcol,fgcol,country_code)
+    # News data
+    news.newsparse(framenews, bgcol, fgcol, country_code)
 
-    #currency converter and exchange rates
+    # currency converter and exchange rates
     framecc = Frame(root)
-    framecc.grid(row=3,column=0)
+    framecc.grid(row=3, column=0)
     framecc.configure(bg="white")
-    
+
     # Menu bar for options and help
     menuBar = Menu(root)
     MENU1 = Menu(menuBar, tearoff=0)
     menuBar.add_cascade(label='OPTION & HELP', menu=MENU1)
-    MENU1.add_command(label='Detailed Information',command=Currency_Wigide_manager.DETAILS)
-    root.config(menu = menuBar)
+    MENU1.add_command(label='Detailed Information',
+                      command=Currency_Wigide_manager.DETAILS)
+    root.config(menu=menuBar)
 
     # variable to hold input amount
     amount = StringVar()
@@ -184,19 +211,18 @@ if __name__=='__main__':  #this is the main function of the program
     with open('data.json', 'r', encoding="utf8") as fileObj:
         choices = json.load(fileObj)
 
-
     # From country name label and dropdown
-    Label(framecc, text="From: ",bg=bgcol).grid(row=0, column=0,padx=10)
+    Label(framecc, text="From: ", bg=bgcol).grid(row=0, column=0, padx=10)
     MenuFrom = OptionMenu(framecc, choice_from, *choices)
-    MenuFrom.grid(row=0, column=1,padx=10)
-    
+    MenuFrom.grid(row=0, column=1, padx=10)
+
     # To country name label and dropdown
-    Label(framecc, text="To: ",bg=bgcol).grid(row=0, column=2,padx=10)
+    Label(framecc, text="To: ", bg=bgcol).grid(row=0, column=2, padx=10)
     MenuTo = OptionMenu(framecc, choice_to, *choices)
-    MenuTo.grid(row=0, column=3,padx=10)
-    
+    MenuTo.grid(row=0, column=3, padx=10)
+
     # Input amount label and dropdown
-    Label(framecc, text="Amount: ",bg=bgcol).grid(row=1, column=0)
+    Label(framecc, text="Amount: ", bg=bgcol).grid(row=1, column=0)
 
     # Click action on the entry box
     def click(event):
@@ -206,6 +232,7 @@ if __name__=='__main__':  #this is the main function of the program
         else:
             input_entry.config(state=NORMAL)
     # Unclick action on the entry box
+
     def unclick(event):
         if input_entry.get() == '':
             input_entry.delete(0, END)
@@ -215,7 +242,7 @@ if __name__=='__main__':  #this is the main function of the program
             input_entry.config(state=DISABLED)
 
     # Entry box for the amount
-    input_entry = Entry(framecc, textvariable=amount,width=15,bg=bgcol)
+    input_entry = Entry(framecc, textvariable=amount, width=15, bg=bgcol)
     input_entry.grid(row=1, column=1, columnspan=2)
 
     input_entry.insert(0, 'Currency value.')
@@ -226,13 +253,109 @@ if __name__=='__main__':  #this is the main function of the program
     input_entry.bind('<Leave>', unclick)
 
     # Result output Label
-    result_label = Label(framecc,bg=bgcol)
+    result_label = Label(framecc, bg=bgcol)
     result_label.grid(row=2, column=1, columnspan=2)
 
     # Convert action button
-    Cal_button = Button(framecc, text="Convert",bg=bgcol,command=lambda:Currency_Wigide_manager.convert(amt=amount,result_L=result_label,toChoice=choice_to,fromChoice=choice_from))
+    Cal_button = Button(framecc, text="Convert", bg=bgcol, command=lambda: Currency_Wigide_manager.convert(
+        amt=amount, result_L=result_label, toChoice=choice_to, fromChoice=choice_from))
     Cal_button.grid(row=1, column=3)
-    
-    
-    root.mainloop()
 
+    # Calendar Widgets
+
+    # Calendar functions
+
+    def LISTevents(temp):
+        print(rem)
+        E_Wid = Toplevel(master=root)
+        E_Wid.title("Event listing.")
+        Label(master=E_Wid, text="Date : ").grid(row=0, column=0)
+        date_E = DateEntry(master=E_Wid)
+        date_E.grid(row=0, column=2)
+        op_field = Text(master=E_Wid, font="Courier 20")
+
+        def listing(date):
+            op_field.delete("1.0", END)
+            print(date)
+            if (not (rem)) or (date not in rem) or (not (rem[date])):
+                messagebox.showerror(title="Error", message="No Plans.")
+                E_Wid.destroy()
+            elif date in rem:
+                s = ""
+                for j in rem[date]:
+                    s += f"{date}:{j}\n"
+
+                op_field.insert(END, s)
+                op_field.grid(row=1, column=0, columnspan=3)
+
+        Button(E_Wid, text="Go", command=lambda: listing(
+            date_E.get_date())).grid(row=0, column=3)
+        E_Wid.mainloop()
+
+    def ADDevent(date):
+        global rem
+        E_Wid = Toplevel(master=root)
+        E_Wid.title("Event Adding.")
+        Label(master=E_Wid, text=f"Date of the event {date}.").pack()
+        E_Name = Entry(master=E_Wid)
+        E_Name.pack()
+
+        def ADDER():
+            cal.calevent_create(date, "Hello", tags=["test1"])
+            if date not in rem:
+                rem[date] = []
+            rem[date].append(str(E_Name.get()))
+            print(rem)
+
+            ans = messagebox.showinfo(
+                title="successfully Added", message="Event added successfully to the Plans.")
+            print(ans)
+
+            E_Wid.destroy()
+        Button(E_Wid, text="Add Event", command=ADDER).pack()
+
+        E_Wid.mainloop()
+
+    def DELevent(date):
+        MessageDIS = "Select the event no. \n"
+        try:
+            for i in range(len(rem[date])):
+                MessageDIS += f"{i+1 :>3} : {rem[date][i] :>15}\n"
+            messagebox.showinfo(title="Menu", message=MessageDIS)
+        except KeyError:
+            messagebox.showerror("Event Error", "No Events on the day.")
+            return
+        E_Wid = Toplevel(master=root)
+        E_Wid.title("Event Deletion.")
+
+        del_date = Entry(master=E_Wid)
+        del_date.pack()
+
+        def del_confirm():
+            question = messagebox.showwarning(
+                "Please confirm", "please confirm")
+            if question:
+                rem[date].pop(int(del_date.get())-1)
+                messagebox.showinfo("done", "done")
+                E_Wid.destroy()
+
+        Button(master=E_Wid, text="Click", command=del_confirm).pack()
+        E_Wid.mainloop()
+
+
+
+    cal = Calendar(framecal, font="Courier 14")
+    cal.pack(fill="both", expand=True)
+
+    rem = {}
+    choice_what = StringVar()
+    choice_what.set("Add Event")
+    functions = {"Add Event": ADDevent.__name__,
+                 "List Events": LISTevents.__name__, "Delete Event": DELevent.__name__}
+    Label(framecal, text="Chose the Action :").pack(side=LEFT)
+    MenuFrom = OptionMenu(framecal, choice_what, *functions.keys())
+    MenuFrom.pack(side=LEFT)
+    Button(framecal, text="OK", command=lambda: eval(
+        f"{functions[choice_what.get()]}(cal.selection_get())")).pack(side=LEFT)
+
+    root.mainloop()
