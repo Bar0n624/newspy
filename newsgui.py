@@ -27,6 +27,7 @@ import weather
 import news
 import location
 from cal2 import *
+
 # Create Nominatim object for geolocation
 
 stockdownloadlist = {}
