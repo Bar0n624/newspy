@@ -40,7 +40,8 @@ def stock(tickerlist,framestock,bgcol,fgcol,yf,stockdownloadlist,flagdaynight,ro
         except:
             print (f"Sorry, the ticker name ({tickername}) is invalid or data is unavailable.")
             quit()
-        longname,symbol = tickerinfo.info["longName"],tickerinfo.info["symbol"]
+        print(tickerinfo)
+        longname,symbol =tickername,tickername #tickerinfo.info["longName"],tickerinfo.info["symbol"]
         tickernameLabel = Label(framestock,text=longname, bg=bgcol, fg=fgcol)
         tickersymLabel = Label(framestock, text = "("+symbol+")", bg=bgcol, fg=fgcol)
         data = yf.download(tickers =symbol, period = "1mo") 

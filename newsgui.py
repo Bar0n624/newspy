@@ -35,7 +35,7 @@ flagdaynight = True
 colormode = -1
 
 # Default stock ticker list
-tickerlist = []  # "MSFT", "AAPL", "TSLA", "GOOGL"]#, "GME"]
+tickerlist = ["MSFT", "AAPL", "TSLA", "GOOGL","GME"]  # "MSFT", "AAPL", "TSLA", "GOOGL"]#, "GME"]
 
 
 def time():
