@@ -35,7 +35,7 @@ flagdaynight = True
 colormode = -1
 
 # Default stock ticker list
-tickerlist = ["MSFT", "AAPL", "TSLA", "GOOGL"]  # "MSFT", "AAPL", "TSLA", "GOOGL"]#, "GME"]
+tickerlist = ["MSFT"]#, "AAPL", "TSLA", "GOOGL"]  # "MSFT", "AAPL", "TSLA", "GOOGL"]#, "GME"]
 
 
 def time():
@@ -276,9 +276,12 @@ if __name__ == '__main__':  # this is the main function of the program
         op_field = Text(master=E_Wid, font="Courier 12")
 
         def listing(date):
+            date=str(date)
             op_field.config(state=NORMAL)
             op_field.delete("1.0", END)
             print(date)
+            with open('reminder.json', 'r', encoding="utf8") as f:
+                rem=json.load(f)
             if (not (rem)) or (date not in rem) or (not (rem[date])):
                 messagebox.showerror(title="Error", message="No Plans.")
                 E_Wid.destroy()
@@ -302,14 +305,16 @@ if __name__ == '__main__':  # this is the main function of the program
         Label(master=E_Wid, text=f"Date of the event {date}.").pack()
         E_Name = Entry(master=E_Wid)
         E_Name.pack()
-
+        date=str(date)
         def ADDER():
  
             if date not in rem:
+                
                 rem[date] = []
             rem[date].append(str(E_Name.get()))
             print(rem)
-
+            with open('reminder.json', 'w', encoding="utf8") as f:
+                json.dump(rem,f)
             ans = messagebox.showinfo(
                 title="successfully Added", message="Event added successfully to the Plans.")
             print(ans)
@@ -321,36 +326,49 @@ if __name__ == '__main__':  # this is the main function of the program
 
     def DELevent(date):
         MessageDIS = "Select the event no. \n"
+        date=str(date)
+        MessageDIS = {}
+        print(rem)
         try:
             for i in range(len(rem[date])):
-                MessageDIS += f"{i+1 :>3} : {rem[date][i] :>15}\n"
-            messagebox.showinfo(title="Menu", message=MessageDIS)
+                MessageDIS[(f"{i+1 :>3} : {rem[date][i] :>15}\n")] = i
+            E_Wid = Toplevel(master=root)
+            E_Wid.title("Event Deletion.")
+            Label(master=E_Wid,text="Event Deletion").grid(row=0,column= 1)
+            Label(master=E_Wid,text="Event Ids : ").grid(row=1,column= 0)
+            del_date = StringVar()
+            MenuDate= OptionMenu(E_Wid, del_date, *MessageDIS.keys())
+            MenuDate.grid(row=1,column=1)
+
+            def del_confirm():
+                question = messagebox.showwarning(
+                    "Please confirm", "please confirm")
+                if question:
+                    rem[date].pop(int(MessageDIS[del_date.get()])-1)
+                    with open('reminder.json', 'w', encoding="utf8") as f:
+                        json.dump(rem,f)
+                    E_Wid.destroy()
+
+            Button(master=E_Wid, text="Ok", command=del_confirm).grid(row=2,column=0)
+            Button(master=E_Wid, text="Cancel", command=E_Wid.destroy).grid(row=2,column=2)
+
+            E_Wid.mainloop()
         except KeyError:
             messagebox.showerror("Event Error", "No Events on the day.")
             return
-        E_Wid = Toplevel(master=root)
-        E_Wid.title("Event Deletion.")
 
-        del_date = Entry(master=E_Wid)
-        del_date.pack()
 
-        def del_confirm():
-            question = messagebox.showwarning(
-                "Please confirm", "please confirm")
-            if question:
-                rem[date].pop(int(del_date.get())-1)
-                messagebox.showinfo("done", "done")
-                E_Wid.destroy()
-
-        Button(master=E_Wid, text="Click", command=del_confirm).pack()
-        E_Wid.mainloop()
 
 
 
     cal = Calendar(framecal, font="Courier 14")
     cal.pack(fill="both", expand=True)
 
-    rem = {}
+    
+    with open('reminder.json', 'r', encoding="utf8") as f:
+        rem = json.load(f)
+        print(rem)
+    
     choice_what = StringVar()
     choice_what.set("Add Event")
     functions = {"Add Event": ADDevent.__name__,
