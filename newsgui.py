@@ -35,7 +35,7 @@ flagdaynight = True
 colormode = -1
 
 # Default stock ticker list
-tickerlist = ["MSFT", "AAPL", "TSLA", "GOOGL","GME"]  # "MSFT", "AAPL", "TSLA", "GOOGL"]#, "GME"]
+tickerlist = ["MSFT", "AAPL", "TSLA", "GOOGL"]  # "MSFT", "AAPL", "TSLA", "GOOGL"]#, "GME"]
 
 
 def time():
@@ -304,7 +304,7 @@ if __name__ == '__main__':  # this is the main function of the program
         E_Name.pack()
 
         def ADDER():
-            cal.calevent_create(date, "Hello", tags=["test1"])
+ 
             if date not in rem:
                 rem[date] = []
             rem[date].append(str(E_Name.get()))
