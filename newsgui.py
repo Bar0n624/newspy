@@ -36,7 +36,7 @@ colormode = -1
 
 # Default stock ticker list
 # , "AAPL", "TSLA", "GOOGL"]  # "MSFT", "AAPL", "TSLA", "GOOGL"]#, "GME"]
-tickerlist = ["MSFT"]
+tickerlist = []
 
 
 def time():
@@ -96,7 +96,7 @@ if __name__ == '__main__':  # this is the main function of the program
 
     # Tkinter boilerplate shit
     root = Tk()
-    root.geometry("1575x900")
+    # root.geometry("1575x900")
     root.title("NEWS")
     root.configure(bg=bgcol)
 
@@ -181,7 +181,7 @@ if __name__ == '__main__':  # this is the main function of the program
     news.newsparse(framenews, bgcol, fgcol, country_code)
 
     # currency converter and exchange rates
-    framecc = Frame(root)
+    framecc = Frame(root, highlightbackground="black", highlightthickness=2)
     framecc.grid(row=1, column=3, columnspan=1,pady=(100,0),sticky='w')
     framecc.configure(bg="white")
 
@@ -298,6 +298,15 @@ if __name__ == '__main__':  # this is the main function of the program
         Button(E_Wid, text="Go", command=lambda: listing(
             date_E.get_date())).grid(row=0, column=2)
         E_Wid.mainloop()
+    event_listing_spc = Text(master=root, font="Courier 12") 
+    event_listing_spc.grid(row=1,column=3)
+    event_listing_spc.insert(END,"No Plans")
+    sel=StringVar()
+
+    def my_upd(*args):
+        print(str(sel.get()))
+    sel.trace('w', my_upd)
+
 
     def ADDevent(date):
         global rem
@@ -364,7 +373,7 @@ if __name__ == '__main__':  # this is the main function of the program
 
         E_Wid.mainloop()
 
-    cal = Calendar(framecal, font="Courier 14")
+    cal = Calendar(framecal, font="Courier 14",textvaiable=sel)
     cal.pack(fill="both", expand=True)
 
     with open('reminder.json', 'r', encoding="utf8") as f:
