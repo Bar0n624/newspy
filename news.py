@@ -55,5 +55,5 @@ def newsparse(framenews,bgcol,fgcol,country_code): #function to process all the 
         descLabel.grid(column = 1,row=rownum, sticky="w")
         
         newscount+=1
-        if newscount==4: #limits news to upto 5 elements
+        if newscount==5: #limits news to upto 5 elements
             break

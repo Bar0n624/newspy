@@ -95,7 +95,7 @@ if __name__ == '__main__':  # this is the main function of the program
 
     # Tkinter boilerplate shit
     root = Tk()
-    root.geometry("1400x750")
+    root.geometry("1575x900")
     root.title("NEWS")
     root.configure(bg=bgcol)
 
@@ -103,17 +103,17 @@ if __name__ == '__main__':  # this is the main function of the program
 
     # frame for daytime
     framedaytime = Frame(root)
-    framedaytime.grid(row=0, column=1, padx=(5, 0), sticky="n")
+    framedaytime.grid(row=0, column=1, columnspan=2, padx=(5, 0), sticky="n")
     framedaytime.configure(bg=bgcol)
 
     # frame for weather
     frameweather = Frame(root)
-    frameweather.grid(row=0, column=0, padx=(5, 0), sticky="e")
+    frameweather.grid(row=0, column=0, padx=(30, 0), sticky="n")
     frameweather.configure(bg=bgcol)
 
     # frame for calander
     framecal = Frame(master=root)
-    framecal.grid(row=0, column=2, padx=(30, 0))
+    framecal.grid(row=0, column=3, rowspan=9,pady=(0, 700), sticky='n')
     framecal.config(bg=bgcol)
 
     # frame for stocks
@@ -140,9 +140,9 @@ if __name__ == '__main__':  # this is the main function of the program
         "bahnscrift", 15), bg=bgcol, fg=fgcol)
     date()
 
-    greetLabel.grid(row=0, column=1, sticky='w')
-    timeLabel.grid(row=1, column=1, sticky='w')
-    dateLabel.grid(row=2, column=1, sticky='w')
+    greetLabel.grid(row=0, column=4, padx=(0,0), sticky='n')
+    timeLabel.grid(row=1, column=4, padx=(0,0), sticky='n')
+    dateLabel.grid(row=2, column=4, padx=(0,0), sticky='n')
 
     # Weather information is set in the next few lines of code using information from the weather file
 
@@ -153,16 +153,16 @@ if __name__ == '__main__':  # this is the main function of the program
     weatherLabel.configure(text=weather.weather(city_name), compound="right")
 
     locLabel = Label(frameweather, text="%s, %s" % (
-        city_name, country_name), font=("century gothic", 15), bg=bgcol, fg=fgcol)
+        city_name, country_name), font=("century gothic", 20), bg=bgcol, fg=fgcol)
 
     # loads the weather asset png
     weatherim = PhotoImage(file="assets/weather.png")
     weatherLabel.configure(image=weatherim)
 
-    weathertextLabel.grid(row=0, column=1, sticky="w")
-    weatherLabel.grid(row=1, column=1, sticky="nw")
+    weathertextLabel.grid(row=1, column=1, sticky="n")
+    weatherLabel.grid(row=2, column=1, sticky="nw")
 
-    locLabel.grid(row=0, column=3, sticky="w", padx=(30, 0))
+    locLabel.grid(row=0, column=1, sticky="n", padx=(0, 0))
 
     # Stock information
     stockLabel = Label(framestock, text="Live Stock Info", font=(
@@ -181,7 +181,7 @@ if __name__ == '__main__':  # this is the main function of the program
 
     # currency converter and exchange rates
     framecc = Frame(root)
-    framecc.grid(row=3, column=0)
+    framecc.grid(row=1, column=3, columnspan=1,pady=(100,0),sticky='w')
     framecc.configure(bg="white")
 
     # Menu bar for options and help
