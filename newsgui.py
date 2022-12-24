@@ -298,15 +298,6 @@ if __name__ == '__main__':  # this is the main function of the program
         Button(E_Wid, text="Go", command=lambda: listing(
             date_E.get_date())).grid(row=0, column=2)
         E_Wid.mainloop()
-    event_listing_spc = Text(master=root, font="Courier 12") 
-    event_listing_spc.grid(row=1,column=3)
-    event_listing_spc.insert(END,"No Plans")
-    sel=StringVar()
-
-    def my_upd(*args):
-        print(str(sel.get()))
-    sel.trace('w', my_upd)
-
 
     def ADDevent(date):
         global rem
@@ -373,7 +364,7 @@ if __name__ == '__main__':  # this is the main function of the program
 
         E_Wid.mainloop()
 
-    cal = Calendar(framecal, font="Courier 14",textvaiable=sel)
+    cal = Calendar(framecal, font="Courier 14")
     cal.pack(fill="both", expand=True)
 
     with open('reminder.json', 'r', encoding="utf8") as f:
