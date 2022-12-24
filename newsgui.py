@@ -267,15 +267,27 @@ if __name__ == '__main__':  # this is the main function of the program
 
     # Calendar functions
 
-    def LISTevents(temp):
-        print(rem)
+    def LISTevents(date):
+        # print(rem)
+        global rem
         E_Wid = Toplevel(master=root)
         E_Wid.title("Event listing.")
-        Label(master=E_Wid, text="Date : ").grid(row=0, column=0)
-        date_E = DateEntry(master=E_Wid)
-        date_E.grid(row=0, column=1)
-        op_field = Text(master=E_Wid, font="Courier 12")
+        Label(master=E_Wid,text="All Events ").grid(row=0, column=0)
+        # Label(master=E_Wid, text="Date : ").grid(row=0, column=0)
+        # date_E = DateEntry(master=E_Wid)
+        # date_E.grid(row=0, column=1)
+        op_field = Text(master=E_Wid, font="Courier 14",width=30)
+        with open('reminder.json', 'r', encoding="utf8") as f:
+                rem = json.load(f)
+        s = ""
+        for j in sorted(rem):
+            for i in rem[j]:
+                    s += f"{j}:{i}\n"
 
+        op_field.insert(END, s)
+        op_field.config(state=DISABLED)
+        op_field.grid(row=1, column=0)
+        Button(E_Wid, text="Close", command=E_Wid.destroy).grid(row=2, column=0,sticky=S)
         def listing(date):
             date = str(date)
             op_field.config(state=NORMAL)
@@ -295,8 +307,9 @@ if __name__ == '__main__':  # this is the main function of the program
                 op_field.config(state=DISABLED)
                 op_field.grid(row=1, column=0, columnspan=3)
 
-        Button(E_Wid, text="Go", command=lambda: listing(
-            date_E.get_date())).grid(row=0, column=2)
+        # Button(E_Wid, text="Go", command=lambda: listing(
+        #     date_E.get_date())).grid(row=0, column=2)
+
         E_Wid.mainloop()
     res_l=Text(master=framecal,width=28, height=30,font="Courier 12")
     res_l.grid(row=2,column=0,columnspan=3,sticky=W)
@@ -375,7 +388,7 @@ if __name__ == '__main__':  # this is the main function of the program
             date = str(date)
             res_l.config(state=NORMAL)
             res_l.delete("1.0", END)
-            print(date)
+            # print(date)
             with open('reminder.json', 'r', encoding="utf8") as f:
                 rem = json.load(f)
             if (not (rem)) or (date not in rem) or (not (rem[date])):
