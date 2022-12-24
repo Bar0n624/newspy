@@ -96,7 +96,7 @@ if __name__ == '__main__':  # this is the main function of the program
 
     # Tkinter boilerplate shit
     root = Tk()
-    # root.geometry("1575x900")
+    root.geometry("1575x900")
     root.title("NEWS")
     root.configure(bg=bgcol)
 
