@@ -26,7 +26,7 @@ import webbrowser
 import weather
 import news
 import location
-from cal2 import *
+from threading import Timer
 
 # Create Nominatim object for geolocation
 
@@ -35,8 +35,8 @@ flagdaynight = True
 colormode = -1
 
 # Default stock ticker list
-# , "AAPL", "TSLA", "GOOGL"]  # "MSFT", "AAPL", "TSLA", "GOOGL"]#, "GME"]
-tickerlist = []
+tickerlist = ["MSFT", "AAPL", "TSLA", "GOOGL"]
+
 
 
 def time():
@@ -109,7 +109,7 @@ if __name__ == '__main__':  # this is the main function of the program
 
     # frame for weather
     frameweather = Frame(root)
-    frameweather.grid(row=0, column=0, padx=(30, 0), sticky="n")
+    # frameweather.grid(row=0, column=0, padx=(30, 0), sticky="n")
     frameweather.configure(bg=bgcol)
 
     # frame for calander
@@ -123,7 +123,7 @@ if __name__ == '__main__':  # this is the main function of the program
     framestock.configure(bg=bgcol)
 
     framenews = Frame(root)
-    framenews.grid(row=1, column=1, padx=(30, 0), columnspan=2, sticky="n")
+    # framenews.grid(row=1, column=1, padx=(30, 0), columnspan=2, sticky="n")
     framenews.configure(bg=bgcol)
 
     # Widgets
@@ -182,7 +182,7 @@ if __name__ == '__main__':  # this is the main function of the program
 
     # currency converter and exchange rates
     framecc = Frame(root, highlightbackground="black", highlightthickness=2)
-    framecc.grid(row=1, column=3, columnspan=1,pady=(100,0),sticky='w')
+    framecc.grid(row=2, column=0,sticky='n')
     framecc.configure(bg="white")
 
     # Menu bar for options and help
@@ -298,6 +298,9 @@ if __name__ == '__main__':  # this is the main function of the program
         Button(E_Wid, text="Go", command=lambda: listing(
             date_E.get_date())).grid(row=0, column=2)
         E_Wid.mainloop()
+    res_l=Text(master=framecal,width=28, height=30,font="Courier 12")
+    res_l.grid(row=2,column=0,columnspan=3,sticky=W)
+
 
     def ADDevent(date):
         global rem
@@ -307,6 +310,7 @@ if __name__ == '__main__':  # this is the main function of the program
         E_Name = Entry(master=E_Wid)
         E_Name.pack()
         date = str(date)
+        print(date)
 
         def ADDER():
 
@@ -365,7 +369,26 @@ if __name__ == '__main__':  # this is the main function of the program
         E_Wid.mainloop()
 
     cal = Calendar(framecal, font="Courier 14")
-    cal.pack(fill="both", expand=True)
+    cal.grid(row=0,column=0,sticky=W,columnspan=3)
+
+    def listing_SELDATE(date):
+            date = str(date)
+            res_l.config(state=NORMAL)
+            res_l.delete("1.0", END)
+            print(date)
+            with open('reminder.json', 'r', encoding="utf8") as f:
+                rem = json.load(f)
+            if (not (rem)) or (date not in rem) or (not (rem[date])):
+                res_l.insert(END,"No Plans.")
+            elif date in rem:
+                s = ""
+                for j in rem[date]:
+                    s += f"{date}:{j}\n"
+
+                res_l.insert(END, s)
+                res_l.config(state=DISABLED)
+            Timer(1,lambda : listing_SELDATE(cal.selection_get())).start()
+    listing_SELDATE(cal.selection_get())
 
     with open('reminder.json', 'r', encoding="utf8") as f:
         rem = json.load(f)
@@ -375,10 +398,10 @@ if __name__ == '__main__':  # this is the main function of the program
     choice_what.set("Add Event")
     functions = {"Add Event": ADDevent.__name__,
                  "List Events": LISTevents.__name__, "Delete Event": DELevent.__name__}
-    Label(framecal, text="Chose the Action :").pack(side=LEFT)
+    Label(framecal, text="Chose the Action :").grid(row=1,column=0,sticky=W)
     MenuFrom = OptionMenu(framecal, choice_what, *functions.keys())
-    MenuFrom.pack(side=LEFT)
+    MenuFrom.grid(column=1,row=1,sticky=W)
     Button(framecal, text="OK", command=lambda: eval(
-        f"{functions[choice_what.get()]}(cal.selection_get())")).pack(side=LEFT)
+        f"{functions[choice_what.get()]}(cal.selection_get())")).grid(row=1,column=2,sticky=W)
 
     root.mainloop()
