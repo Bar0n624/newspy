@@ -109,7 +109,7 @@ if __name__ == '__main__':  # this is the main function of the program
 
     # frame for weather
     frameweather = Frame(root)
-    # frameweather.grid(row=0, column=0, padx=(30, 0), sticky="n")
+    frameweather.grid(row=0, column=0, padx=(30, 0), sticky="n")
     frameweather.configure(bg=bgcol)
 
     # frame for calander
@@ -123,7 +123,7 @@ if __name__ == '__main__':  # this is the main function of the program
     framestock.configure(bg=bgcol)
 
     framenews = Frame(root)
-    # framenews.grid(row=1, column=1, padx=(30, 0), columnspan=2, sticky="n")
+    framenews.grid(row=1, column=1, padx=(30, 0), columnspan=2, sticky="n")
     framenews.configure(bg=bgcol)
 
     # Widgets
@@ -410,7 +410,7 @@ if __name__ == '__main__':  # this is the main function of the program
     choice_what = StringVar()
     choice_what.set("Add Event")
     functions = {"Add Event": ADDevent.__name__,
-                 "List Events": LISTevents.__name__, "Delete Event": DELevent.__name__}
+                 "List all Events": LISTevents.__name__, "Delete Event": DELevent.__name__}
     Label(framecal, text="Chose the Action :").grid(row=1,column=0,sticky=W)
     MenuFrom = OptionMenu(framecal, choice_what, *functions.keys())
     MenuFrom.grid(column=1,row=1,sticky=W)
