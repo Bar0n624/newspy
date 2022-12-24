@@ -38,7 +38,6 @@ colormode = -1
 tickerlist = ["MSFT", "AAPL", "TSLA", "GOOGL"]
 
 
-
 def time():
     currenttime = strftime('%I:%M:%S %p')
     timeLabel.configure(text=currenttime)
@@ -114,7 +113,7 @@ if __name__ == '__main__':  # this is the main function of the program
 
     # frame for calander
     framecal = Frame(master=root)
-    framecal.grid(row=0, column=3, rowspan=9,pady=(0, 700), sticky='n')
+    framecal.grid(row=0, column=3, rowspan=9, pady=(0, 700), sticky='n')
     framecal.config(bg=bgcol)
 
     # frame for stocks
@@ -141,9 +140,9 @@ if __name__ == '__main__':  # this is the main function of the program
         "bahnscrift", 15), bg=bgcol, fg=fgcol)
     date()
 
-    greetLabel.grid(row=0, column=4, padx=(0,0), sticky='n')
-    timeLabel.grid(row=1, column=4, padx=(0,0), sticky='n')
-    dateLabel.grid(row=2, column=4, padx=(0,0), sticky='n')
+    greetLabel.grid(row=0, column=4, padx=(0, 0), sticky='n')
+    timeLabel.grid(row=1, column=4, padx=(0, 0), sticky='n')
+    dateLabel.grid(row=2, column=4, padx=(0, 0), sticky='n')
 
     # Weather information is set in the next few lines of code using information from the weather file
 
@@ -182,7 +181,7 @@ if __name__ == '__main__':  # this is the main function of the program
 
     # currency converter and exchange rates
     framecc = Frame(root, highlightbackground="black", highlightthickness=2)
-    framecc.grid(row=2, column=0,sticky='n')
+    framecc.grid(row=2, column=0, sticky='n')
     framecc.configure(bg="white")
 
     # Menu bar for options and help
@@ -272,22 +271,24 @@ if __name__ == '__main__':  # this is the main function of the program
         global rem
         E_Wid = Toplevel(master=root)
         E_Wid.title("Event listing.")
-        Label(master=E_Wid,text="All Events ").grid(row=0, column=0)
+        Label(master=E_Wid, text="All Events ").grid(row=0, column=0)
         # Label(master=E_Wid, text="Date : ").grid(row=0, column=0)
         # date_E = DateEntry(master=E_Wid)
         # date_E.grid(row=0, column=1)
-        op_field = Text(master=E_Wid, font="Courier 14",width=30)
+        op_field = Text(master=E_Wid, font="Courier 14", width=30)
         with open('reminder.json', 'r', encoding="utf8") as f:
-                rem = json.load(f)
+            rem = json.load(f)
         s = ""
         for j in sorted(rem):
             for i in rem[j]:
-                    s += f"{j}:{i}\n"
+                s += f"{j}:{i}\n"
 
         op_field.insert(END, s)
         op_field.config(state=DISABLED)
         op_field.grid(row=1, column=0)
-        Button(E_Wid, text="Close", command=E_Wid.destroy).grid(row=2, column=0,sticky=S)
+        Button(E_Wid, text="Close", command=E_Wid.destroy).grid(
+            row=2, column=0, sticky=S)
+
         def listing(date):
             date = str(date)
             op_field.config(state=NORMAL)
@@ -311,9 +312,8 @@ if __name__ == '__main__':  # this is the main function of the program
         #     date_E.get_date())).grid(row=0, column=2)
 
         E_Wid.mainloop()
-    res_l=Text(master=framecal,width=28, height=30,font="Courier 12")
-    res_l.grid(row=2,column=0,columnspan=3,sticky=W)
-
+    res_l = Text(master=framecal, width=28, height=30, font="Courier 12")
+    res_l.grid(row=2, column=0, columnspan=3, sticky=W)
 
     def ADDevent(date):
         global rem
@@ -382,25 +382,25 @@ if __name__ == '__main__':  # this is the main function of the program
         E_Wid.mainloop()
 
     cal = Calendar(framecal, font="Courier 14")
-    cal.grid(row=0,column=0,sticky=W,columnspan=3)
+    cal.grid(row=0, column=0, sticky=W, columnspan=3)
 
     def listing_SELDATE(date):
-            date = str(date)
-            res_l.config(state=NORMAL)
-            res_l.delete("1.0", END)
-            # print(date)
-            with open('reminder.json', 'r', encoding="utf8") as f:
-                rem = json.load(f)
-            if (not (rem)) or (date not in rem) or (not (rem[date])):
-                res_l.insert(END,"No Plans.")
-            elif date in rem:
-                s = ""
-                for j in rem[date]:
-                    s += f"{date}:{j}\n"
+        date = str(date)
+        res_l.config(state=NORMAL)
+        res_l.delete("1.0", END)
+        # print(date)
+        with open('reminder.json', 'r', encoding="utf8") as f:
+            rem = json.load(f)
+        if (not (rem)) or (date not in rem) or (not (rem[date])):
+            res_l.insert(END, "No Plans.")
+        elif date in rem:
+            s = ""
+            for j in rem[date]:
+                s += f"{date}:{j}\n"
 
-                res_l.insert(END, s)
-                res_l.config(state=DISABLED)
-            Timer(1,lambda : listing_SELDATE(cal.selection_get())).start()
+            res_l.insert(END, s)
+            res_l.config(state=DISABLED)
+        Timer(1, lambda: listing_SELDATE(cal.selection_get())).start()
     listing_SELDATE(cal.selection_get())
 
     with open('reminder.json', 'r', encoding="utf8") as f:
@@ -411,10 +411,14 @@ if __name__ == '__main__':  # this is the main function of the program
     choice_what.set("Add Event")
     functions = {"Add Event": ADDevent.__name__,
                  "List all Events": LISTevents.__name__, "Delete Event": DELevent.__name__}
-    Label(framecal, text="Chose the Action :").grid(row=1,column=0,sticky=W)
+    Label(framecal, text="Chose the Action :").grid(row=1, column=0, sticky=W)
     MenuFrom = OptionMenu(framecal, choice_what, *functions.keys())
-    MenuFrom.grid(column=1,row=1,sticky=W)
-    Button(framecal, text="OK", command=lambda: eval(
-        f"{functions[choice_what.get()]}(cal.selection_get())")).grid(row=1,column=2,sticky=W)
+    MenuFrom.grid(column=1, row=1, sticky=W)
+    event_caller = Button(framecal, text="OK", command=lambda: eval(
+        f"{functions[choice_what.get()]}(cal.selection_get())"))
+    event_caller.grid(row=1, column=2, sticky=W)
+
+    # framecal.bind('<Return>', lambda _: eval(f"{functions[choice_what.get()]}(cal.selection_get())"))
+    # root.bind('<Return>', lambda _: eval(f"{functions[choice_what.get()]}(cal.selection_get())"))
 
     root.mainloop()
