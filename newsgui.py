@@ -27,6 +27,8 @@ import weather
 import news
 import location
 from threading import Timer
+from PIL import Image
+
 
 # Create Nominatim object for geolocation
 
@@ -97,8 +99,12 @@ if __name__ == '__main__':  # this is the main function of the program
     root = Tk()
     root.geometry("1575x900")
     root.title("NEWS")
-    root.configure(bg=bgcol)
 
+
+
+    root.configure(bg=bgcol)
+    bgp = PhotoImage(file = "/Users/uchitnm/Workspace/GROUP_WORK/newspy/bgp.png")
+    Label(root,image=bgp).place(x=0,y=0)
     # Frames
 
     # frame for daytime
