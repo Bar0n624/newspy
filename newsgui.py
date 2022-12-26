@@ -28,7 +28,7 @@ import news
 import location
 from threading import Timer
 from PIL import Image
-
+import custom
 
 # Create Nominatim object for geolocation
 
@@ -37,7 +37,12 @@ flagdaynight = True
 colormode = -1
 
 # Default stock ticker list
-tickerlist = ["MSFT", "AAPL", "TSLA", "GOOGL"]
+# tickerlist = ["MSFT", "AAPL", "TSLA", "GOOGL"]
+
+with open("user_custom.json",'r') as setting:
+    current_default = json.load(setting)
+    tickerlist = current_default["tickerlist"]
+    colormode = current_default["colormode"]
 
 
 def time():
@@ -193,9 +198,13 @@ if __name__ == '__main__':  # this is the main function of the program
     # Menu bar for options and help
     menuBar = Menu(root)
     MENU1 = Menu(menuBar, tearoff=0)
-    menuBar.add_cascade(label='OPTION & HELP', menu=MENU1)
-    MENU1.add_command(label='Detailed Information',
+    menuBar.add_cascade(label='Settings & Help', menu=MENU1)
+    MENU1.add_command(label='Settings',
+                      command=custom.main)
+    MENU1.add_command(label='Detailed Information (Exachange rates)',
                       command=Currency_Wigide_manager.DETAILS)
+    MENU1.add_separator()
+    MENU1.add_command(label="Exit",command=exit)
     root.config(menu=menuBar)
 
     # variable to hold input amount
