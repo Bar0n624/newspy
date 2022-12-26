@@ -59,3 +59,4 @@ def stock(tickerlist,framestock,bgcol,fgcol,yf,stockdownloadlist,flagdaynight,ro
     for tickername in tickerlist: #iterates through tickers to plot the graph using the plot function 
         plot(tickername, rownumgraph,stockdownloadlist,flagdaynight,fgcol,bgcol,framestock)
         rownumgraph+=3
+    return rownumgraph

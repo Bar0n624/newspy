@@ -102,7 +102,7 @@ if __name__ == '__main__':  # this is the main function of the program
 
     # Tkinter boilerplate shit
     root = Tk()
-    root.geometry("1575x900")
+    root.geometry("1700x900")
     root.title("NEWS")
 
 
@@ -129,7 +129,7 @@ if __name__ == '__main__':  # this is the main function of the program
 
     # frame for stocks
     framestock = Frame(root)
-    framestock.grid(row=1, column=0, sticky="n")
+    framestock.grid(row=1, column=0, columnspan=1,sticky="n")
     framestock.configure(bg=bgcol)
 
     framenews = Frame(root)
@@ -184,16 +184,16 @@ if __name__ == '__main__':  # this is the main function of the program
     print(f"Collecting data for {len(tickerlist)} stock ticker(s)...")
 
     # calls stock function within stock file to load stock data into the stock labels
-    stock.stock(tickerlist, framestock, bgcol, fgcol, yf,
-                stockdownloadlist, flagdaynight, rownumgraph)
+    rownum=stock.stock(tickerlist, framestock, bgcol, fgcol, yf,
+                stockdownloadlist, flagdaynight, rownumgraph)+1
 
     # News data
     news.newsparse(framenews, bgcol, fgcol, country_code)
 
     # currency converter and exchange rates
-    framecc = Frame(root, highlightbackground="black", highlightthickness=2)
-    framecc.grid(row=2, column=0, sticky='n')
-    framecc.configure(bg="white")
+    framecc = Frame(framestock, highlightbackground="black", highlightthickness=2,width=350)
+    framecc.grid(row=rownum, column=0, columnspan=3,pady=(25,0))
+    framecc.configure(bg=bgcol,width=350)
 
     # Menu bar for options and help
     menuBar = Menu(root)
@@ -228,17 +228,17 @@ if __name__ == '__main__':  # this is the main function of the program
         choices = json.load(fileObj)
 
     # From country name label and dropdown
-    Label(framecc, text="From: ", bg=bgcol).grid(row=0, column=0, padx=10)
+    Label(framecc, text="From: ", bg=bgcol,font='Banschrift 13').grid(row=rownum-1, column=0, padx=55,pady=(0,0))
     MenuFrom = OptionMenu(framecc, choice_from, *choices)
-    MenuFrom.grid(row=0, column=1, padx=10)
+    MenuFrom.grid(row=rownum, column=0, padx=(0,35))
 
     # To country name label and dropdown
-    Label(framecc, text="To: ", bg=bgcol).grid(row=0, column=2, padx=10)
+    Label(framecc, text="To: ", bg=bgcol,font='Banschrift 13').grid(row=rownum-1, column=1,pady=(0,0),padx=55)
     MenuTo = OptionMenu(framecc, choice_to, *choices)
-    MenuTo.grid(row=0, column=3, padx=10)
+    MenuTo.grid(row=rownum, column=1, padx=(0,0))
 
     # Input amount label and dropdown
-    Label(framecc, text="Amount: ", bg=bgcol).grid(row=1, column=0)
+    Label(framecc, text="Amount: ", bg=bgcol).grid(row=rownum+1, column=0,padx=(0,35))
 
     # Click action on the entry box
     def click(event):
@@ -259,7 +259,7 @@ if __name__ == '__main__':  # this is the main function of the program
 
     # Entry box for the amount
     input_entry = Entry(framecc, textvariable=amount, width=15, bg=bgcol)
-    input_entry.grid(row=1, column=1, columnspan=2)
+    input_entry.grid(row=rownum+1, column=0, columnspan=1, padx=(0,35))
 
     input_entry.insert(0, 'Currency value.')
     input_entry.config(state=DISABLED)
@@ -269,13 +269,13 @@ if __name__ == '__main__':  # this is the main function of the program
     input_entry.bind('<Leave>', unclick)
 
     # Result output Label
-    result_label = Label(framecc, bg=bgcol)
-    result_label.grid(row=2, column=1, columnspan=2)
+    result_label = Label(framecc, bg=bgcol,font=('Banschrift',13))
+    result_label.grid(row=rownum+2, column=0, columnspan=2)
 
     # Convert action button
     Cal_button = Button(framecc, text="Convert", bg=bgcol, command=lambda: Currency_Wigide_manager.convert(
         amt=amount, result_L=result_label, toChoice=choice_to, fromChoice=choice_from))
-    Cal_button.grid(row=1, column=3)
+    Cal_button.grid(row=rownum+1, column=1)
 
     # Calendar Widgets
 
