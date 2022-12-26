@@ -37,5 +37,5 @@ def convert(amt,result_L,toChoice,fromChoice):
         amt.set("1")
         txt=f'Current Exchange rates: { symbolsCurrencyJson[str(toChoice.get())]["symbol"] } {str(result["result"])}'
     else:
-        txt="Converted Amount: "+symbolsCurrencyJson[str(toChoice.get())]["symbol"]+" "+str(result["result"])
+        txt=symbolsCurrencyJson[str(toChoice.get())]["symbol"]+" "+str(result["result"])
     result_L.config(text=txt)
