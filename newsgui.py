@@ -103,8 +103,8 @@ if __name__ == '__main__':  # this is the main function of the program
 
 
     root.configure(bg=bgcol)
-    bgp = PhotoImage(file = "/Users/uchitnm/Workspace/GROUP_WORK/newspy/bgp.png")
-    Label(root,image=bgp).place(x=0,y=0)
+    #bgp = PhotoImage(file = "/Users/uchitnm/Workspace/GROUP_WORK/newspy/bgp.png")
+    #Label(root,image=bgp).place(x=0,y=0)
     # Frames
 
     # frame for daytime
