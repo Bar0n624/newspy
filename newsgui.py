@@ -10,6 +10,8 @@ Salient features include:
     Current weather information for the user's city
     Latest information about the value of user inputted stocks, neatly organized in a graph
     Top news in the user's country with related pictures and a short snippet of the article. When button or text is clicked, user is taken to the article in the default web browser
+    Currency converter and Exachange rates 
+    Calandar Manager with dynamic listing on the preference of the user.
     Automatic dark theme based on the time of the day to reduce strain on the eyes
 '''
 from tkinter import *
@@ -278,7 +280,7 @@ def main():
 
     # Convert action button
     Cal_button = Button(framecc, text="Convert", bg=bgcol,fg=fgcol, command=lambda: Currency_Wigide_manager.convert(
-        amt=amount, result_L=result_label, toChoice=choice_to, fromChoice=choice_from))
+        amt=amount, result_L=result_label, toChoice=choice_to, fromChoice=choice_from,FG=fgcol,BG=bgcol))
     Cal_button.grid(row=rownum+1, column=1)
 
     # Calendar Widgets
@@ -394,7 +396,10 @@ def main():
 
             res_l.insert(END, s)
             res_l.config(state=DISABLED)
-        Timer(1, lambda: listing_SELDATE(cal.selection_get())).start()
+        try:
+            Timer(1, lambda: listing_SELDATE(cal.selection_get())).start()
+        except Exception:
+            ...
     listing_SELDATE(cal.selection_get())
 
     with open('reminder.json', 'r', encoding="utf8") as f:

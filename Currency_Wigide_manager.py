@@ -20,7 +20,7 @@ def DETAILS():
     info_wid.mainloop()
 
 
-def convert(amt,result_L,toChoice,fromChoice):
+def convert(amt,result_L,toChoice,fromChoice,BG,FG):
     # print(str(choice_to.get()))
     if str(amt.get()) == "Currency value.":
         amt.set("1")
@@ -38,4 +38,4 @@ def convert(amt,result_L,toChoice,fromChoice):
         txt=f'Current Exchange rates: { symbolsCurrencyJson[str(toChoice.get())]["symbol"] } {str(result["result"])}'
     else:
         txt=symbolsCurrencyJson[str(toChoice.get())]["symbol"]+" "+str(result["result"])
-    result_L.config(text=txt)
+    result_L.config(text=txt,bg=BG,fg=FG)
