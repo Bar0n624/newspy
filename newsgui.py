@@ -32,59 +32,66 @@ import custom
 
 # Create Nominatim object for geolocation
 
-stockdownloadlist = {}
-flagdaynight = True
-colormode = 1
 
 # Default stock ticker list
 # tickerlist = ["MSFT", "AAPL", "TSLA", "GOOGL"]
 
-with open("user_custom.json",'r') as setting:
-    current_default = json.load(setting)
-    tickerlist = current_default["tickerlist"]
-    #colormode = current_default["colormode"]
 
 
-def time():
-    currenttime = strftime('%I:%M:%S %p')
-    timeLabel.configure(text=currenttime)
-    timeLabel.after(1000, time)
+def main():
+    stockdownloadlist = {}
+    flagdaynight = True
+    colormode = 1
 
-
-def greeting():
-    currenthour = int(strftime('%H'))
-    # Greeting based on the time of the day
-    if 5 <= currenthour < 12:
-        greetLabel.configure(text="Good morning")
-    elif 12 <= currenthour < 17:
-        greetLabel.configure(text="Good afternoon")
-    elif 17 <= currenthour <= 23 or 0 <= currenthour < 5:
-        greetLabel.configure(text="Good evening")
-
-
-def date():
-    # sets date
-    currentdate = strftime('%A, %d %B %Y')
-    dateLabel.configure(text=currentdate)
-
-
-def open_site(url):
-    # function to open a url in browser
-    webbrowser.open(url, new=0)
-
-
-def mkdir_p(path):
-    # creates path for assets and other important stuff
-    try:
-        os.makedirs(path)
-    except OSError as exc:
-        if exc.errno == errno.EEXIST and os.path.isdir(path):
-            pass
+    with open("user_custom.json",'r') as setting:
+        current_default = json.load(setting)
+        tickerlist = current_default["tickerlist"]
+        color = current_default["colormode"]
+        if color.lower()=='dark':
+            colormode=1
+        elif color.lower()=='light':
+            colormode=-1
         else:
-            raise
+            colormode=0
 
 
-if __name__ == '__main__':  # this is the main function of the program
+    def time():
+        currenttime = strftime('%I:%M:%S %p')
+        timeLabel.configure(text=currenttime)
+        timeLabel.after(1000, time)
+
+
+    def greeting():
+        currenthour = int(strftime('%H'))
+        # Greeting based on the time of the day
+        if 5 <= currenthour < 12:
+            greetLabel.configure(text="Good morning")
+        elif 12 <= currenthour < 17:
+            greetLabel.configure(text="Good afternoon")
+        elif 17 <= currenthour <= 23 or 0 <= currenthour < 5:
+            greetLabel.configure(text="Good evening")
+
+
+    def date():
+        # sets date
+        currentdate = strftime('%A, %d %B %Y')
+        dateLabel.configure(text=currentdate)
+
+
+    def open_site(url):
+        # function to open a url in browser
+        webbrowser.open(url, new=0)
+
+
+    def mkdir_p(path):
+        # creates path for assets and other important stuff
+        try:
+            os.makedirs(path)
+        except OSError as exc:
+            if exc.errno == errno.EEXIST and os.path.isdir(path):
+                pass
+            else:
+                raise
     print("Collecting data from the internet. Please Wait...")
     mkdir_p("assets")
     # gets information from the location file
@@ -102,7 +109,7 @@ if __name__ == '__main__':  # this is the main function of the program
 
     # Tkinter boilerplate shit
     root = Tk()
-    root.geometry("1670x900")
+    root.geometry("1650x870")
     root.title("Widget Panel")
     root.configure(bg=bgcol)
     #bgp = PhotoImage(file = "/Users/uchitnm/Workspace/GROUP_WORK/newspy/bgp.png")
@@ -197,7 +204,7 @@ if __name__ == '__main__':  # this is the main function of the program
     MENU1 = Menu(menuBar, tearoff=0)
     menuBar.add_cascade(label='Settings & Help', menu=MENU1)
     MENU1.add_command(label='Settings',
-                      command=custom.main)
+                      command=lambda: custom.main(root))
     MENU1.add_command(label='Detailed Information (Exachange rates)',
                       command=Currency_Wigide_manager.DETAILS)
     MENU1.add_separator()
@@ -299,7 +306,7 @@ if __name__ == '__main__':  # this is the main function of the program
             row=2, column=0, sticky=S)
 
         E_Wid.mainloop()
-    res_l = Text(master=framecal, width=35, height=25, font="Courier 14",bg=bgcol,fg=fgcol)
+    res_l = Text(master=framecal, width=32, height=17, font="Courier 14",bg=bgcol,fg=fgcol)
     res_l.grid(row=2, column=0, columnspan=3, sticky=W)
 
     def ADDevent(date):
@@ -409,3 +416,6 @@ if __name__ == '__main__':  # this is the main function of the program
     # root.bind('<Return>', lambda _: eval(f"{functions[choice_what.get()]}(cal.selection_get())"))
 
     root.mainloop()
+
+if __name__ == '__main__':  # this is the main function of the program
+    main()
