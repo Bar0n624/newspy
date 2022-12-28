@@ -279,14 +279,11 @@ if __name__ == '__main__':  # this is the main function of the program
     # Calendar functions
 
     def LISTevents(date):
-        # print(rem)
+
         global rem
         E_Wid = Toplevel(master=root)
         E_Wid.title("Event listing.")
         Label(master=E_Wid, text="All Events ").grid(row=0, column=0)
-        # Label(master=E_Wid, text="Date : ").grid(row=0, column=0)
-        # date_E = DateEntry(master=E_Wid)
-        # date_E.grid(row=0, column=1)
         op_field = Text(master=E_Wid, font="Courier 14", width=30)
         with open('reminder.json', 'r', encoding="utf8") as f:
             rem = json.load(f)
@@ -301,30 +298,8 @@ if __name__ == '__main__':  # this is the main function of the program
         Button(E_Wid, text="Close", command=E_Wid.destroy).grid(
             row=2, column=0, sticky=S)
 
-        def listing(date):
-            date = str(date)
-            op_field.config(state=NORMAL)
-            op_field.delete("1.0", END)
-            print(date)
-            with open('reminder.json', 'r', encoding="utf8") as f:
-                rem = json.load(f)
-            if (not (rem)) or (date not in rem) or (not (rem[date])):
-                messagebox.showerror(title="Error", message="No Plans.")
-                E_Wid.destroy()
-            elif date in rem:
-                s = ""
-                for j in rem[date]:
-                    s += f"{date}:{j}\n"
-
-                op_field.insert(END, s)
-                op_field.config(state=DISABLED)
-                op_field.grid(row=1, column=0, columnspan=3)
-
-        # Button(E_Wid, text="Go", command=lambda: listing(
-        #     date_E.get_date())).grid(row=0, column=2)
-
         E_Wid.mainloop()
-    res_l = Text(master=framecal, width=35, height=38, font="Courier 12")
+    res_l = Text(master=framecal, width=35, height=25, font="Courier 14",bg=bgcol,fg=fgcol)
     res_l.grid(row=2, column=0, columnspan=3, sticky=W)
 
     def ADDevent(date):
