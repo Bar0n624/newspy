@@ -1,3 +1,5 @@
+
+
 '''
 News GUI
 News GUI is a clean, intuitive and functional GUI written in python. 
@@ -24,73 +26,20 @@ import yfinance as yf
 import Currency_Wigide_manager
 import errno
 import stock
+import webbrowser
 import weather
 import news
 import location
 from threading import Timer
 from PIL import Image
-
+import custom
 
 # Create Nominatim object for geolocation
 
 
 # Default stock ticker list
 # tickerlist = ["MSFT", "AAPL", "TSLA", "GOOGL"]
-def CUSTOM():
 
-        ct_root=Tk()
-
-        with open("user_custom.json",'r') as setting:
-                    current_default = json.load(setting)
-
-        ct_root.title("Settings")
-        Label(ct_root,text='Settings',font="Algerian 20").grid(row=0,column=0,columnspan=2,pady=(12,25),padx=20)
-
-
-        Label(ct_root,text='Stocks  ').grid(row=1,column=0,sticky=W)
-        stock_entry=Entry(ct_root)
-        stock_entry.insert(END,current_default["tickerlist"])
-        stock_entry.grid(row=1,column=1)
-
-
-
-        Label(ct_root,text='Theme  ').grid(row=2,column=0,sticky=W)
-        th_val=StringVar()
-        th_val.set(str(current_default["colormode"]))
-        print(th_val.get())
-        th_menu=OptionMenu(ct_root, th_val,*["Light","Dark","Auto"])
-        th_menu.grid(row=2,column=1)
-
-        Label(ct_root,text='Weather location  ').grid(row=3,column=0,sticky=W)
-        weather_entry=Entry(ct_root)
-        weather_entry.grid(row=3,column=1)
-
-        def save_changes():
-            ans = messagebox.askokcancel("Confirmaton","Confirm changes ?")
-            if ans :
-
-                print(current_default)
-                current_default["tickerlist"] = stock_entry.get().split(" ")
-                current_default["colormode"] = str(th_val.get())
-            
-                with open("user_custom.json",'w') as setting:
-                    json.dump(current_default,setting,indent=4)
-                print(current_default)
-                # root.config(bg="black") 
-                ct_root.destroy()
-                # root.update_idletasks()
-
-                
-            else:
-                return
-                
-        cb=Button(ct_root,text="Cancel",command=ct_root.destroy)
-        cb.grid(row=4,column=0)
-        sb=Button(ct_root,text="Save",command=save_changes)
-        sb.grid(row=4,column=1)
-
-
-        ct_root.mainloop()
 
 
 def main():
@@ -229,11 +178,6 @@ def main():
 
     locLabel.grid(row=0, column=1, sticky="n", padx=(0, 0))
 
-
-
-
-
-
     # Stock information
     stockLabel = Label(framestock, text="Live Stock Info", font=(
         "century gothic bold", 20), bg=bgcol, fg=fgcol)
@@ -259,7 +203,7 @@ def main():
     MENU1 = Menu(menuBar, tearoff=0)
     menuBar.add_cascade(label='Settings & Help', menu=MENU1)
     MENU1.add_command(label='Settings',
-                      command=CUSTOM)
+                      command=lambda: custom.main(root))
     MENU1.add_command(label='Detailed Information (Exachange rates)',
                       command=Currency_Wigide_manager.DETAILS)
     MENU1.add_separator()
