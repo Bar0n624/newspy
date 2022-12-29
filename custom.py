@@ -21,19 +21,17 @@ def main(root):
     stock_entry.grid(row=1,column=1)
 
 
-    Label(ct_root,text='Background  ').grid(row=2,column=0,sticky=W)
-    bg_entry=Entry(ct_root)
-    bg_entry.grid(row=2,column=1)
 
-    Label(ct_root,text='Theme  ').grid(row=3,column=0,sticky=W)
+    Label(ct_root,text='Theme  ').grid(row=2,column=0,sticky=W)
     th_val=StringVar()
-    th_val.set(current_default["colormode"])
+    th_val.set(set(current_default["colormode"]))
+    print(th_val.get())
     th_menu=OptionMenu(ct_root, th_val,"Light","Dark","Auto")
-    th_menu.grid(row=3,column=1)
+    th_menu.grid(row=2,column=1)
 
-    Label(ct_root,text='Weather location  ').grid(row=4,column=0,sticky=W)
+    Label(ct_root,text='Weather location  ').grid(row=3,column=0,sticky=W)
     weather_entry=Entry(ct_root)
-    weather_entry.grid(row=4,column=1)
+    weather_entry.grid(row=3,column=1)
 
     def save_changes():
         ans = messagebox.askokcancel("Confirmaton","Confirm changes ?")
@@ -46,18 +44,19 @@ def main(root):
             with open("user_custom.json",'w') as setting:
                 json.dump(current_default,setting,indent=4)
             print(current_default)
-            root.destroy()
+            # root.config(bg="black") 
             ct_root.destroy()
+            # root.update_idletasks()
+            root.destory()
             newsgui.main()
-            
             
         else:
             return
             
     cb=Button(ct_root,text="Cancel",command=ct_root.destroy)
-    cb.grid(row=5,column=0)
+    cb.grid(row=4,column=0)
     sb=Button(ct_root,text="Save",command=save_changes)
-    sb.grid(row=5,column=1)
+    sb.grid(row=4,column=1)
 
 
     ct_root.mainloop()

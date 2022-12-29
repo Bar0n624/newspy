@@ -80,11 +80,6 @@ def main():
         dateLabel.configure(text=currentdate)
 
 
-    def open_site(url):
-        # function to open a url in browser
-        webbrowser.open(url, new=0)
-
-
     def mkdir_p(path):
         # creates path for assets and other important stuff
         try:
