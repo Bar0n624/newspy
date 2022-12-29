@@ -46,7 +46,7 @@ def main(root):
             
             a=current_default['tickerlist']
             if len(a)>5:
-                s=messagebox.askokcancel("Interruption ",'please enter only 5 stocks ')
+                s=messagebox.showerror("Interruption ",'please enter only 5 stocks ')
                 if s:
                     b=a[0:5]
 
