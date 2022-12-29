@@ -47,7 +47,7 @@ def main(root):
             # root.config(bg="black") 
             ct_root.destroy()
             # root.update_idletasks()
-            root.destory()
+            root.destroy()
             newsgui.main()
             
         else:

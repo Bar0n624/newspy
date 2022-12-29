@@ -1,10 +1,9 @@
 {
     "tickerlist": [
-        "MSFT",
         "AAPL",
         "META",
         "GOOGL",
         "AMZN"
     ],
-    "colormode": "Dark"
+    "colormode": "Light"
 }
