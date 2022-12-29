@@ -2,7 +2,7 @@ from tkinter import *
 import json
 from tkinter import messagebox
 import newsgui
-def main():
+def main(root):
 
 
 
@@ -61,7 +61,7 @@ def main():
             # root.config(bg="black") 
             ct_root.destroy()
             # root.update_idletasks()
-            #root.destroy()
+            root.destroy()
             newsgui.main()
             
         else:
