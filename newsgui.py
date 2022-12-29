@@ -394,7 +394,10 @@ def main():
 
             res_l.insert(END, s)
             res_l.config(state=DISABLED)
-        Timer(1, lambda: listing_SELDATE(cal.selection_get())).start()
+        try:
+            Timer(1, lambda: listing_SELDATE(cal.selection_get())).start()
+        except Exception:
+            ...
     listing_SELDATE(cal.selection_get())
 
     with open('reminder.json', 'r', encoding="utf8") as f:
