@@ -32,59 +32,66 @@ import custom
 
 # Create Nominatim object for geolocation
 
-stockdownloadlist = {}
-flagdaynight = True
-colormode = -1
 
 # Default stock ticker list
 # tickerlist = ["MSFT", "AAPL", "TSLA", "GOOGL"]
 
-with open("user_custom.json",'r') as setting:
-    current_default = json.load(setting)
-    tickerlist = current_default["tickerlist"]
-    colormode = current_default["colormode"]
 
 
-def time():
-    currenttime = strftime('%I:%M:%S %p')
-    timeLabel.configure(text=currenttime)
-    timeLabel.after(1000, time)
+def main():
+    stockdownloadlist = {}
+    flagdaynight = True
+    colormode = 1
 
-
-def greeting():
-    currenthour = int(strftime('%H'))
-    # Greeting based on the time of the day
-    if 5 <= currenthour < 12:
-        greetLabel.configure(text="Good morning")
-    elif 12 <= currenthour < 17:
-        greetLabel.configure(text="Good afternoon")
-    elif 17 <= currenthour <= 23 or 0 <= currenthour < 5:
-        greetLabel.configure(text="Good evening")
-
-
-def date():
-    # sets date
-    currentdate = strftime('%A, %d %B %Y')
-    dateLabel.configure(text=currentdate)
-
-
-def open_site(url):
-    # function to open a url in browser
-    webbrowser.open(url, new=0)
-
-
-def mkdir_p(path):
-    # creates path for assets and other important stuff
-    try:
-        os.makedirs(path)
-    except OSError as exc:
-        if exc.errno == errno.EEXIST and os.path.isdir(path):
-            pass
+    with open("user_custom.json",'r') as setting:
+        current_default = json.load(setting)
+        tickerlist = current_default["tickerlist"]
+        color = current_default["colormode"]
+        if color.lower()=='dark':
+            colormode=1
+        elif color.lower()=='light':
+            colormode=-1
         else:
-            raise
+            colormode=0
 
 
-if __name__ == '__main__':  # this is the main function of the program
+    def time():
+        currenttime = strftime('%I:%M:%S %p')
+        timeLabel.configure(text=currenttime)
+        timeLabel.after(1000, time)
+
+
+    def greeting():
+        currenthour = int(strftime('%H'))
+        # Greeting based on the time of the day
+        if 5 <= currenthour < 12:
+            greetLabel.configure(text="Good morning")
+        elif 12 <= currenthour < 17:
+            greetLabel.configure(text="Good afternoon")
+        elif 17 <= currenthour <= 23 or 0 <= currenthour < 5:
+            greetLabel.configure(text="Good evening")
+
+
+    def date():
+        # sets date
+        currentdate = strftime('%A, %d %B %Y')
+        dateLabel.configure(text=currentdate)
+
+
+    def open_site(url):
+        # function to open a url in browser
+        webbrowser.open(url, new=0)
+
+
+    def mkdir_p(path):
+        # creates path for assets and other important stuff
+        try:
+            os.makedirs(path)
+        except OSError as exc:
+            if exc.errno == errno.EEXIST and os.path.isdir(path):
+                pass
+            else:
+                raise
     print("Collecting data from the internet. Please Wait...")
     mkdir_p("assets")
     # gets information from the location file
@@ -102,11 +109,8 @@ if __name__ == '__main__':  # this is the main function of the program
 
     # Tkinter boilerplate shit
     root = Tk()
-    root.geometry("1700x900")
-    root.title("NEWS")
-
-
-
+    root.geometry("1650x870")
+    root.title("Widget Panel")
     root.configure(bg=bgcol)
     #bgp = PhotoImage(file = "/Users/uchitnm/Workspace/GROUP_WORK/newspy/bgp.png")
     #Label(root,image=bgp).place(x=0,y=0)
@@ -124,7 +128,7 @@ if __name__ == '__main__':  # this is the main function of the program
 
     # frame for calander
     framecal = Frame(master=root)
-    framecal.grid(row=0, column=3, rowspan=9, pady=(0, 700), sticky='n')
+    framecal.grid(row=0, column=3, rowspan=9, pady=(0,0), sticky='n')
     framecal.config(bg=bgcol)
 
     # frame for stocks
@@ -191,7 +195,7 @@ if __name__ == '__main__':  # this is the main function of the program
     news.newsparse(framenews, bgcol, fgcol, country_code)
 
     # currency converter and exchange rates
-    framecc = Frame(framestock, highlightbackground="black", highlightthickness=2,width=350)
+    framecc = Frame(framestock, highlightbackground=fgcol, highlightthickness=2,width=350)
     framecc.grid(row=rownum, column=0, columnspan=3,pady=(25,0))
     framecc.configure(bg=bgcol,width=350)
 
@@ -200,7 +204,7 @@ if __name__ == '__main__':  # this is the main function of the program
     MENU1 = Menu(menuBar, tearoff=0)
     menuBar.add_cascade(label='Settings & Help', menu=MENU1)
     MENU1.add_command(label='Settings',
-                      command=custom.main)
+                      command=lambda: custom.main(root))
     MENU1.add_command(label='Detailed Information (Exachange rates)',
                       command=Currency_Wigide_manager.DETAILS)
     MENU1.add_separator()
@@ -228,17 +232,17 @@ if __name__ == '__main__':  # this is the main function of the program
         choices = json.load(fileObj)
 
     # From country name label and dropdown
-    Label(framecc, text="From: ", bg=bgcol,font='Banschrift 13').grid(row=rownum-1, column=0, padx=55,pady=(0,0))
+    Label(framecc, text="From: ", bg=bgcol,font='Banschrift 13', fg=fgcol).grid(row=rownum-1, column=0, padx=55,pady=(0,0))
     MenuFrom = OptionMenu(framecc, choice_from, *choices)
     MenuFrom.grid(row=rownum, column=0, padx=(0,35))
 
     # To country name label and dropdown
-    Label(framecc, text="To: ", bg=bgcol,font='Banschrift 13').grid(row=rownum-1, column=1,pady=(0,0),padx=55)
+    Label(framecc, text="To: ", bg=bgcol,font='Banschrift 13',fg=fgcol).grid(row=rownum-1, column=1,pady=(0,0),padx=55)
     MenuTo = OptionMenu(framecc, choice_to, *choices)
     MenuTo.grid(row=rownum, column=1, padx=(0,0))
 
     # Input amount label and dropdown
-    Label(framecc, text="Amount: ", bg=bgcol).grid(row=rownum+1, column=0,padx=(0,35))
+    Label(framecc, text="Amount: ", bg=bgcol,fg=fgcol).grid(row=rownum+1, column=0,padx=(0,35))
 
     # Click action on the entry box
     def click(event):
@@ -258,7 +262,7 @@ if __name__ == '__main__':  # this is the main function of the program
             input_entry.config(state=DISABLED)
 
     # Entry box for the amount
-    input_entry = Entry(framecc, textvariable=amount, width=15, bg=bgcol)
+    input_entry = Entry(framecc, textvariable=amount, width=15, bg=fgcol)
     input_entry.grid(row=rownum+1, column=0, columnspan=1, padx=(0,35))
 
     input_entry.insert(0, 'Currency value.')
@@ -269,11 +273,11 @@ if __name__ == '__main__':  # this is the main function of the program
     input_entry.bind('<Leave>', unclick)
 
     # Result output Label
-    result_label = Label(framecc, bg=bgcol,font=('Banschrift',13))
+    result_label = Label(framecc, bg=bgcol,font=('Banschrift',13),fg=fgcol)
     result_label.grid(row=rownum+2, column=0, columnspan=2)
 
     # Convert action button
-    Cal_button = Button(framecc, text="Convert", bg=bgcol, command=lambda: Currency_Wigide_manager.convert(
+    Cal_button = Button(framecc, text="Convert", bg=bgcol,fg=fgcol, command=lambda: Currency_Wigide_manager.convert(
         amt=amount, result_L=result_label, toChoice=choice_to, fromChoice=choice_from))
     Cal_button.grid(row=rownum+1, column=1)
 
@@ -282,14 +286,11 @@ if __name__ == '__main__':  # this is the main function of the program
     # Calendar functions
 
     def LISTevents(date):
-        # print(rem)
+
         global rem
         E_Wid = Toplevel(master=root)
         E_Wid.title("Event listing.")
         Label(master=E_Wid, text="All Events ").grid(row=0, column=0)
-        # Label(master=E_Wid, text="Date : ").grid(row=0, column=0)
-        # date_E = DateEntry(master=E_Wid)
-        # date_E.grid(row=0, column=1)
         op_field = Text(master=E_Wid, font="Courier 14", width=30)
         with open('reminder.json', 'r', encoding="utf8") as f:
             rem = json.load(f)
@@ -304,30 +305,8 @@ if __name__ == '__main__':  # this is the main function of the program
         Button(E_Wid, text="Close", command=E_Wid.destroy).grid(
             row=2, column=0, sticky=S)
 
-        def listing(date):
-            date = str(date)
-            op_field.config(state=NORMAL)
-            op_field.delete("1.0", END)
-            print(date)
-            with open('reminder.json', 'r', encoding="utf8") as f:
-                rem = json.load(f)
-            if (not (rem)) or (date not in rem) or (not (rem[date])):
-                messagebox.showerror(title="Error", message="No Plans.")
-                E_Wid.destroy()
-            elif date in rem:
-                s = ""
-                for j in rem[date]:
-                    s += f"{date}:{j}\n"
-
-                op_field.insert(END, s)
-                op_field.config(state=DISABLED)
-                op_field.grid(row=1, column=0, columnspan=3)
-
-        # Button(E_Wid, text="Go", command=lambda: listing(
-        #     date_E.get_date())).grid(row=0, column=2)
-
         E_Wid.mainloop()
-    res_l = Text(master=framecal, width=28, height=30, font="Courier 12")
+    res_l = Text(master=framecal, width=32, height=17, font="Courier 14",bg=bgcol,fg=fgcol)
     res_l.grid(row=2, column=0, columnspan=3, sticky=W)
 
     def ADDevent(date):
@@ -431,9 +410,12 @@ if __name__ == '__main__':  # this is the main function of the program
     MenuFrom.grid(column=1, row=1, sticky=W)
     event_caller = Button(framecal, text="OK", command=lambda: eval(
         f"{functions[choice_what.get()]}(cal.selection_get())"))
-    event_caller.grid(row=1, column=2, sticky=W)
+    event_caller.grid(row=1, column=2, sticky='e')
 
     # framecal.bind('<Return>', lambda _: eval(f"{functions[choice_what.get()]}(cal.selection_get())"))
     # root.bind('<Return>', lambda _: eval(f"{functions[choice_what.get()]}(cal.selection_get())"))
 
     root.mainloop()
+
+if __name__ == '__main__':  # this is the main function of the program
+    main()

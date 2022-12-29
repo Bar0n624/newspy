@@ -1,7 +1,8 @@
 from tkinter import *
 import json
 from tkinter import messagebox
-def main():
+import newsgui
+def main(root):
 
 
 
@@ -45,7 +46,11 @@ def main():
             with open("user_custom.json",'w') as setting:
                 json.dump(current_default,setting,indent=4)
             print(current_default)
+            root.destroy()
             ct_root.destroy()
+            newsgui.main()
+            
+            
         else:
             return
             
