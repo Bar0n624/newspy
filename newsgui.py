@@ -434,7 +434,7 @@ def main():
     cal.grid(row=0, column=0, sticky=W, columnspan=3)
 
     def listing_SELDATE(date):
-        try:
+        
             date = str(date)
             res_l.config(state=NORMAL)
             res_l.delete("1.0", END)
@@ -448,12 +448,12 @@ def main():
                 for j in rem[date]:
                     s += f"{date}:{j}\n"
 
-                res_l.insert(END, s)
-                res_l.config(state=DISABLED)
-
-            Timer(1, lambda: listing_SELDATE(cal.selection_get())).start()
-        except Exception:
-            pass
+            res_l.insert(END, s)
+            res_l.config(state=DISABLED)
+            try:
+                Timer(1, lambda: listing_SELDATE(cal.selection_get())).start()
+            except Exception:
+                ...
         
     listing_SELDATE(cal.selection_get())
 

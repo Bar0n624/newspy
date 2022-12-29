@@ -3,7 +3,8 @@
         "AAPL",
         "META",
         "GOOGL",
-        "AMZN"
+        "AMZN",
+        "MSFT"
     ],
-    "colormode": "Light"
+    "colormode": "Dark"
 }
