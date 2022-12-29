@@ -392,10 +392,10 @@ def main():
 
             res_l.insert(END, s)
             res_l.config(state=DISABLED)
-        try:
-            Timer(1, lambda: listing_SELDATE(cal.selection_get())).start()
-        except Exception:
-            ...
+            try:
+                Timer(1, lambda: listing_SELDATE(cal.selection_get())).start()
+            except Exception:
+                ...
         
     listing_SELDATE(cal.selection_get())
 

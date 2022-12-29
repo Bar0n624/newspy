@@ -2,12 +2,12 @@ from tkinter import *
 import json
 from tkinter import messagebox
 import newsgui
-def main(root):
+def main():
 
 
 
     ct_root=Tk()
-
+    ct_root.geometry('300x200')
     with open("user_custom.json",'r') as setting:
                 current_default = json.load(setting)
 
@@ -16,7 +16,7 @@ def main(root):
 
 
     Label(ct_root,text='Stocks  ').grid(row=1,column=0,sticky=W)
-    stock_entry=Entry(ct_root)
+    stock_entry=Entry(ct_root,width=30)
     stock_entry.insert(END,current_default["tickerlist"])
     stock_entry.grid(row=1,column=1)
 
@@ -61,7 +61,7 @@ def main(root):
             # root.config(bg="black") 
             ct_root.destroy()
             # root.update_idletasks()
-            root.destroy()
+            #root.destroy()
             newsgui.main()
             
         else:
