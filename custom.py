@@ -24,7 +24,9 @@ def main(root):
 
     Label(ct_root,text='Theme  ').grid(row=2,column=0,sticky=W)
     th_val=StringVar()
+
     th_val.set(str(current_default["colormode"]))
+
     print(th_val.get())
     th_menu=OptionMenu(ct_root, th_val,"Light","Dark","Auto")
     th_menu.grid(row=2,column=1)

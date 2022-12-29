@@ -10,6 +10,8 @@ Salient features include:
     Current weather information for the user's city
     Latest information about the value of user inputted stocks, neatly organized in a graph
     Top news in the user's country with related pictures and a short snippet of the article. When button or text is clicked, user is taken to the article in the default web browser
+    Currency converter and Exachange rates 
+    Calandar Manager with dynamic listing on the preference of the user.
     Automatic dark theme based on the time of the day to reduce strain on the eyes
 '''
 from tkinter import *
@@ -76,11 +78,6 @@ def main():
         # sets date
         currentdate = strftime('%A, %d %B %Y')
         dateLabel.configure(text=currentdate)
-
-
-    def open_site(url):
-        # function to open a url in browser
-        webbrowser.open(url, new=0)
 
 
     def mkdir_p(path):
@@ -278,7 +275,7 @@ def main():
 
     # Convert action button
     Cal_button = Button(framecc, text="Convert", bg=bgcol,fg=fgcol, command=lambda: Currency_Wigide_manager.convert(
-        amt=amount, result_L=result_label, toChoice=choice_to, fromChoice=choice_from))
+        amt=amount, result_L=result_label, toChoice=choice_to, fromChoice=choice_from,FG=fgcol,BG=bgcol))
     Cal_button.grid(row=rownum+1, column=1)
 
     # Calendar Widgets
@@ -379,18 +376,19 @@ def main():
     cal.grid(row=0, column=0, sticky=W, columnspan=3)
 
     def listing_SELDATE(date):
-        date = str(date)
-        res_l.config(state=NORMAL)
-        res_l.delete("1.0", END)
-        # print(date)
-        with open('reminder.json', 'r', encoding="utf8") as f:
-            rem = json.load(f)
-        if (not (rem)) or (date not in rem) or (not (rem[date])):
-            res_l.insert(END, "No Plans.")
-        elif date in rem:
-            s = ""
-            for j in rem[date]:
-                s += f"{date}:{j}\n"
+        
+            date = str(date)
+            res_l.config(state=NORMAL)
+            res_l.delete("1.0", END)
+            # print(date)
+            with open('reminder.json', 'r', encoding="utf8") as f:
+                rem = json.load(f)
+            if (not (rem)) or (date not in rem) or (not (rem[date])):
+                res_l.insert(END, "No Plans.")
+            elif date in rem:
+                s = ""
+                for j in rem[date]:
+                    s += f"{date}:{j}\n"
 
             res_l.insert(END, s)
             res_l.config(state=DISABLED)
@@ -398,6 +396,7 @@ def main():
             Timer(1, lambda: listing_SELDATE(cal.selection_get())).start()
         except Exception:
             ...
+        
     listing_SELDATE(cal.selection_get())
 
     with open('reminder.json', 'r', encoding="utf8") as f:
