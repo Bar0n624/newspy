@@ -171,7 +171,7 @@ if __name__ == '__main__':  # this is the main function of the program
 
     # Tkinter boilerplate shit
     root = Tk()
-    root.geometry("1650x870")
+    root.geometry("1700x850")
     root.title("Widget Panel")
     root.configure(bg=bgcol)
     #bgp = PhotoImage(file = "/Users/uchitnm/Workspace/GROUP_WORK/newspy/bgp.png")
@@ -295,12 +295,12 @@ if __name__ == '__main__':  # this is the main function of the program
 
     # From country name label and dropdown
     Label(framecc, text="From: ", bg=bgcol,font='Banschrift 13', fg=fgcol).grid(row=rownum-1, column=0, padx=55,pady=(0,0))
-    MenuFrom = OptionMenu(framecc, choice_from, *choices)
+    MenuFrom = ttk.OptionMenu(framecc, choice_from, *choices)
     MenuFrom.grid(row=rownum, column=0, padx=(0,35))
 
     # To country name label and dropdown
     Label(framecc, text="To: ", bg=bgcol,font='Banschrift 13',fg=fgcol).grid(row=rownum-1, column=1,pady=(0,0),padx=55)
-    MenuTo = OptionMenu(framecc, choice_to, *choices)
+    MenuTo = ttk.OptionMenu(framecc, choice_to, *choices)
     MenuTo.grid(row=rownum, column=1, padx=(0,0))
 
     # Input amount label and dropdown
@@ -339,7 +339,7 @@ if __name__ == '__main__':  # this is the main function of the program
     result_label.grid(row=rownum+2, column=0, columnspan=2)
 
     # Convert action button
-    Cal_button = Button(framecc, text="Convert", bg=bgcol,fg=fgcol, command=lambda: Currency_Wigide_manager.convert(
+    Cal_button = ttk.Button(framecc, text="Convert", command=lambda: Currency_Wigide_manager.convert(
         amt=amount, result_L=result_label, toChoice=choice_to, fromChoice=choice_from,FG=fgcol,BG=bgcol))
     Cal_button.grid(row=rownum+1, column=1)
 
@@ -364,7 +364,7 @@ if __name__ == '__main__':  # this is the main function of the program
         op_field.insert(END, s)
         op_field.config(state=DISABLED)
         op_field.grid(row=1, column=0)
-        Button(E_Wid, text="Close", command=E_Wid.destroy).grid(
+        ttk.Button(E_Wid, text="Close", command=E_Wid.destroy).grid(
             row=2, column=0, sticky=S)
 
         E_Wid.mainloop()
@@ -395,7 +395,7 @@ if __name__ == '__main__':  # this is the main function of the program
             print(ans)
 
             E_Wid.destroy()
-        Button(E_Wid, text="Add Event", command=ADDER).pack()
+        ttk.Button(E_Wid, text="Add Event", command=ADDER).pack()
 
         E_Wid.mainloop()
 
@@ -416,7 +416,7 @@ if __name__ == '__main__':  # this is the main function of the program
         Label(master=E_Wid, text="Event Deletion").grid(row=0, column=1)
         Label(master=E_Wid, text="Event Ids : ").grid(row=1, column=0)
         del_date = StringVar()
-        MenuDate = OptionMenu(E_Wid, del_date, *MessageDIS.keys())
+        MenuDate = ttk.OptionMenu(E_Wid, del_date, *MessageDIS.keys())
         MenuDate.grid(row=1, column=1)
 
         def del_confirm():
@@ -430,9 +430,9 @@ if __name__ == '__main__':  # this is the main function of the program
                     json.dump(rem, f)
                 E_Wid.destroy()
 
-        Button(master=E_Wid, text="Ok",
+        ttk.Button(master=E_Wid, text="Ok",
                command=del_confirm).grid(row=2, column=0)
-        Button(master=E_Wid, text="Cancel",
+        ttk.Button(master=E_Wid, text="Cancel",
                command=E_Wid.destroy).grid(row=2, column=2)
 
         E_Wid.mainloop()
@@ -472,9 +472,9 @@ if __name__ == '__main__':  # this is the main function of the program
     choice_what.set("Add Event")
     functions = {"Add Event": ADDevent.__name__,"List all Events": LISTevents.__name__, "Delete Event": DELevent.__name__}
     Label(framecal, text="Chose the Action :").grid(row=1, column=0, sticky=W)
-    MenuFrom = OptionMenu(framecal, choice_what, *functions.keys())
+    MenuFrom = ttk.OptionMenu(framecal, choice_what, *functions.keys())
     MenuFrom.grid(column=1, row=1, sticky=W)
-    event_caller = Button(framecal, text="OK", command=lambda: eval(f"{functions[choice_what.get()]}(cal.selection_get())"))
+    event_caller = ttk.Button(framecal, text="OK", command=lambda: eval(f"{functions[choice_what.get()]}(cal.selection_get())"))
     event_caller.grid(row=1, column=2, sticky='e')
 
     # framecal.bind('<Return>', lambda _: eval(f"{functions[choice_what.get()]}(cal.selection_get())"))
