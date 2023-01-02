@@ -62,7 +62,6 @@ def main(root):
             ct_root.destroy()
             # root.update_idletasks()
             root.destroy()
-            newsgui.main()
             
         else:
             return

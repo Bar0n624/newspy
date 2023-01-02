@@ -21,6 +21,7 @@ from tkcalendar import *
 from tkinter import messagebox
 from time import strftime
 import os
+import sys
 import json
 import yfinance as yf
 import Currency_Wigide_manager
@@ -39,14 +40,110 @@ import custom
 
 # Default stock ticker list
 # tickerlist = ["MSFT", "AAPL", "TSLA", "GOOGL"]
+def time():
+        currenttime = strftime('%I:%M:%S %p')
+        timeLabel.configure(text=currenttime)
+        timeLabel.after(1000, time)
+def greeting():
+        currenthour = int(strftime('%H'))
+        # Greeting based on the time of the day
+        if 5 <= currenthour < 12:
+            greetLabel.configure(text="Good morning")
+        elif 12 <= currenthour < 17:
+            greetLabel.configure(text="Good afternoon")
+        elif 17 <= currenthour <= 23 or 0 <= currenthour < 5:
+            greetLabel.configure(text="Good evening")
+
+
+def date():
+        # sets date
+        currentdate = strftime('%A, %d %B %Y')
+        dateLabel.configure(text=currentdate)
+    
+def mkdir_p(path):
+        # creates path for assets and other important stuff
+        try:
+            os.makedirs(path)
+        except OSError as exc:
+            if exc.errno == errno.EEXIST and os.path.isdir(path):
+                pass
+            else:
+                raise
+
+def setstuff():
+    ct_root=Tk()
+    ct_root.geometry('300x200')
+    with open("user_custom.json",'r') as setting:
+                current_default = json.load(setting)
+
+    ct_root.title("Settings")
+    Label(ct_root,text='Settings',font="Algerian 20").grid(row=0,column=0,columnspan=2,pady=(12,25),padx=20)
+
+
+    Label(ct_root,text='Stocks  ').grid(row=1,column=0,sticky=W)
+    stock_entry=Entry(ct_root,width=30)
+    stock_entry.insert(END,current_default["tickerlist"])
+    stock_entry.grid(row=1,column=1)
 
 
 
-def main():
-    stockdownloadlist = {}
-    flagdaynight = True
-    colormode = 1
+    Label(ct_root,text='Theme  ').grid(row=2,column=0,sticky=W)
+    th_val=StringVar()
 
+    th_val.set(str(current_default["colormode"]))
+
+    print(th_val.get())
+    th_menu=OptionMenu(ct_root, th_val,"Light","Dark","Auto")
+    th_menu.grid(row=2,column=1)
+
+    def save_changes():
+        ans = messagebox.askokcancel("Confirmaton","Confirm changes ?")
+        if ans :
+
+            print(current_default)
+            current_default["tickerlist"] = stock_entry.get().split(" ")
+            current_default["colormode"] = str(th_val.get())
+
+            
+            a=current_default['tickerlist']
+            if len(a)>5:
+                s=messagebox.askretrycancel("Interruption ",'Accept only the first 5 stocks? ')
+                if s:
+                    return
+                
+                else:
+                    b=a[0:5]
+
+                    print(b)
+                        
+                    current_default["tickerlist"]=b
+
+        
+            with open("user_custom.json",'w') as setting:
+                json.dump(current_default,setting,indent=4)
+            print(current_default)
+            ct_root.destroy()
+            root.destroy()
+            os.execl(sys.executable, 'python', __file__)
+            
+        else:
+            return
+            
+    cb=Button(ct_root,text="Cancel",command=ct_root.destroy)
+    cb.grid(row=4,column=0)
+    sb=Button(ct_root,text="Save",command=save_changes)
+    sb.grid(row=4,column=1)
+
+
+    ct_root.mainloop() 
+
+
+stockdownloadlist = {}
+flagdaynight = True
+colormode = 1
+
+    
+if __name__ == '__main__':  # this is the main function of the program
     with open("user_custom.json",'r') as setting:
         current_default = json.load(setting)
         tickerlist = current_default["tickerlist"]
@@ -59,38 +156,7 @@ def main():
             colormode=0
 
 
-    def time():
-        currenttime = strftime('%I:%M:%S %p')
-        timeLabel.configure(text=currenttime)
-        timeLabel.after(1000, time)
-
-
-    def greeting():
-        currenthour = int(strftime('%H'))
-        # Greeting based on the time of the day
-        if 5 <= currenthour < 12:
-            greetLabel.configure(text="Good morning")
-        elif 12 <= currenthour < 17:
-            greetLabel.configure(text="Good afternoon")
-        elif 17 <= currenthour <= 23 or 0 <= currenthour < 5:
-            greetLabel.configure(text="Good evening")
-
-
-    def date():
-        # sets date
-        currentdate = strftime('%A, %d %B %Y')
-        dateLabel.configure(text=currentdate)
-
-
-    def mkdir_p(path):
-        # creates path for assets and other important stuff
-        try:
-            os.makedirs(path)
-        except OSError as exc:
-            if exc.errno == errno.EEXIST and os.path.isdir(path):
-                pass
-            else:
-                raise
+    
     print("Collecting data from the internet. Please Wait...")
     mkdir_p("assets")
     # gets information from the location file
@@ -203,7 +269,7 @@ def main():
     MENU1 = Menu(menuBar, tearoff=0)
     menuBar.add_cascade(label='Settings & Help', menu=MENU1)
     MENU1.add_command(label='Settings',
-                      command=lambda: custom.main(root))
+                      command=setstuff)
     MENU1.add_command(label='Detailed Information (Exachange rates)',
                       command=Currency_Wigide_manager.DETAILS)
     MENU1.add_separator()
@@ -378,7 +444,7 @@ def main():
     cal.grid(row=0, column=0, sticky=W, columnspan=3)
 
     def listing_SELDATE(date):
-        
+            s=''
             date = str(date)
             res_l.config(state=NORMAL)
             res_l.delete("1.0", END)
@@ -421,5 +487,3 @@ def main():
 
     root.mainloop()
 
-if __name__ == '__main__':  # this is the main function of the program
-    main()
