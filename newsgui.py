@@ -444,7 +444,7 @@ if __name__ == '__main__':  # this is the main function of the program
     cal.grid(row=0, column=0, sticky=W, columnspan=3)
 
     def listing_SELDATE(date):
-            s=''
+        
             date = str(date)
             res_l.config(state=NORMAL)
             res_l.delete("1.0", END)
@@ -458,12 +458,12 @@ if __name__ == '__main__':  # this is the main function of the program
                 for j in rem[date]:
                     s += f"{date}:{j}\n"
 
-            res_l.insert(END, s)
-            res_l.config(state=DISABLED)
-            try:
+                res_l.insert(END, s)
+                res_l.config(state=DISABLED)
+
                 Timer(1, lambda: listing_SELDATE(cal.selection_get())).start()
             except Exception:
-                ...
+               pass 
         
     listing_SELDATE(cal.selection_get())
 
@@ -473,13 +473,11 @@ if __name__ == '__main__':  # this is the main function of the program
 
     choice_what = StringVar()
     choice_what.set("Add Event")
-    functions = {"Add Event": ADDevent.__name__,
-                 "List all Events": LISTevents.__name__, "Delete Event": DELevent.__name__}
+    functions = {"Add Event": ADDevent.__name__,"List all Events": LISTevents.__name__, "Delete Event": DELevent.__name__}
     Label(framecal, text="Chose the Action :").grid(row=1, column=0, sticky=W)
     MenuFrom = OptionMenu(framecal, choice_what, *functions.keys())
     MenuFrom.grid(column=1, row=1, sticky=W)
-    event_caller = Button(framecal, text="OK", command=lambda: eval(
-        f"{functions[choice_what.get()]}(cal.selection_get())"))
+    event_caller = Button(framecal, text="OK", command=lambda: eval(f"{functions[choice_what.get()]}(cal.selection_get())"))
     event_caller.grid(row=1, column=2, sticky='e')
 
     # framecal.bind('<Return>', lambda _: eval(f"{functions[choice_what.get()]}(cal.selection_get())"))

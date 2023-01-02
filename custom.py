@@ -46,15 +46,9 @@ def main(root):
             
             a=current_default['tickerlist']
             if len(a)>5:
-                s=messagebox.showerror("Interruption ",'please enter only 5 stocks ')
-                if s:
-                    b=a[0:5]
-
-                    print(b)
+                s=messagebox.showerror("Interruption",'Please enter only 5 stocks ')
+                return
                         
-                    current_default["tickerlist"]=b
-                    
-        
             with open("user_custom.json",'w') as setting:
                 json.dump(current_default,setting,indent=4)
             print(current_default)
