@@ -31,7 +31,7 @@ import weather
 import news
 import location
 from threading import Timer
-
+from tkinter import ttk
 # Create Nominatim object for geolocation
 
 
@@ -90,7 +90,7 @@ def setstuff():
     th_val.set(str(current_default["colormode"]))
 
     print(th_val.get())
-    th_menu=OptionMenu(ct_root, th_val,"Light","Dark","Auto")
+    th_menu=ttk.OptionMenu(ct_root, th_val,"Light","Dark","Auto")
     th_menu.grid(row=2,column=1)
 
     def save_changes():
@@ -126,9 +126,9 @@ def setstuff():
         else:
             return
             
-    cb=Button(ct_root,text="Cancel",command=ct_root.destroy)
+    cb=ttk.Button(ct_root,text="Cancel",command=ct_root.destroy)
     cb.grid(row=4,column=0)
-    sb=Button(ct_root,text="Save",command=save_changes)
+    sb=ttk.Button(ct_root,text="Save",command=save_changes)
     sb.grid(row=4,column=1)
 
 
