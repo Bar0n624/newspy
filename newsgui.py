@@ -27,13 +27,10 @@ import yfinance as yf
 import Currency_Wigide_manager
 import errno
 import stock
-import webbrowser
 import weather
 import news
 import location
 from threading import Timer
-from PIL import Image
-import custom
 
 # Create Nominatim object for geolocation
 
@@ -107,8 +104,8 @@ def setstuff():
             
             a=current_default['tickerlist']
             if len(a)>5:
-                s=messagebox.askretrycancel("Interruption ",'Accept only the first 5 stocks? ')
-                if s:
+                s=messagebox.askokcancel("Interruption ",'Accept only the first 5 stocks? ')
+                if not(s):
                     return
                 
                 else:
@@ -444,24 +441,24 @@ if __name__ == '__main__':  # this is the main function of the program
     cal.grid(row=0, column=0, sticky=W, columnspan=3)
 
     def listing_SELDATE(date):
-        
-            date = str(date)
-            res_l.config(state=NORMAL)
-            res_l.delete("1.0", END)
-            # print(date)
-            with open('reminder.json', 'r', encoding="utf8") as f:
-                rem = json.load(f)
-            if (not (rem)) or (date not in rem) or (not (rem[date])):
-                res_l.insert(END, "No Plans.")
-            elif date in rem:
-                s = ""
-                for j in rem[date]:
-                    s += f"{date}:{j}\n"
+            try:
+                date = str(date)
+                res_l.config(state=NORMAL)
+                res_l.delete("1.0", END)
+                # print(date)
+                with open('reminder.json', 'r', encoding="utf8") as f:
+                    rem = json.load(f)
+                if (not (rem)) or (date not in rem) or (not (rem[date])):
+                    res_l.insert(END, "No Plans.")
+                elif date in rem:
+                    s = ""
+                    for j in rem[date]:
+                        s += f"{date}:{j}\n"
 
-                res_l.insert(END, s)
-                res_l.config(state=DISABLED)
+                    res_l.insert(END, s)
+                    res_l.config(state=DISABLED)
 
-                Timer(1, lambda: listing_SELDATE(cal.selection_get())).start()
+                    Timer(1, lambda: listing_SELDATE(cal.selection_get())).start()
             except Exception:
                pass 
         
