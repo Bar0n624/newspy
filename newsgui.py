@@ -86,11 +86,12 @@ def setstuff():
 
     Label(ct_root,text='Theme  ').grid(row=2,column=0,sticky=W)
     th_val=StringVar()
-
+    print(current_default["colormode"])
     th_val.set(str(current_default["colormode"]))
 
     print(th_val.get())
-    th_menu=ttk.OptionMenu(ct_root, th_val,"Light","Dark","Auto")
+    thl=["Light","Dark","Auto"]
+    th_menu=OptionMenu(ct_root, th_val,*thl)
     th_menu.grid(row=2,column=1)
 
     def save_changes():
