@@ -68,8 +68,8 @@ def mkdir_p(path):
                 raise
 
 def setstuff():
-    ct_root=Tk()
-    ct_root.geometry('300x200')
+    ct_root=Toplevel()
+    # ct_root.geometry('300x200')
     with open("user_custom.json",'r') as setting:
                 current_default = json.load(setting)
 
