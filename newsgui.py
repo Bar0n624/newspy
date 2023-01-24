@@ -31,129 +31,126 @@ import weather
 import news
 import location
 from threading import Timer
-from tkinter import ttk
 # Create Nominatim object for geolocation
 
 
 # Default stock ticker list
 # tickerlist = ["MSFT", "AAPL", "TSLA", "GOOGL"]
 def time():
-        currenttime = strftime('%I:%M:%S %p')
-        timeLabel.configure(text=currenttime)
-        timeLabel.after(1000, time)
+    currenttime = strftime('%I:%M:%S %p')
+    timeLabel.configure(text=currenttime)
+    timeLabel.after(1000, time)
+
+
 def greeting():
-        currenthour = int(strftime('%H'))
-        # Greeting based on the time of the day
-        if 5 <= currenthour < 12:
-            greetLabel.configure(text="Good morning")
-        elif 12 <= currenthour < 17:
-            greetLabel.configure(text="Good afternoon")
-        elif 17 <= currenthour <= 23 or 0 <= currenthour < 5:
-            greetLabel.configure(text="Good evening")
+    currenthour = int(strftime('%H'))
+    # Greeting based on the time of the day
+    if 5 <= currenthour < 12:
+        greetLabel.configure(text="Good morning")
+    elif 12 <= currenthour < 17:
+        greetLabel.configure(text="Good afternoon")
+    elif 17 <= currenthour <= 23 or 0 <= currenthour < 5:
+        greetLabel.configure(text="Good evening")
 
 
 def date():
-        # sets date
-        currentdate = strftime('%A, %d %B %Y')
-        dateLabel.configure(text=currentdate)
-    
+    # sets date
+    currentdate = strftime('%A, %d %B %Y')
+    dateLabel.configure(text=currentdate)
+
+
 def mkdir_p(path):
-        # creates path for assets and other important stuff
-        try:
-            os.makedirs(path)
-        except OSError as exc:
-            if exc.errno == errno.EEXIST and os.path.isdir(path):
-                pass
-            else:
-                raise
+    # creates path for assets and other important stuff
+    try:
+        os.makedirs(path)
+    except OSError as exc:
+        if exc.errno == errno.EEXIST and os.path.isdir(path):
+            pass
+        else:
+            raise
+
 
 def setstuff():
-    ct_root=Toplevel()
+    ct_root = Toplevel()
     # ct_root.geometry('300x200')
-    with open("user_custom.json",'r') as setting:
-                current_default = json.load(setting)
+    with open("user_custom.json", 'r') as setting:
+        current_default = json.load(setting)
 
     ct_root.title("Settings")
-    Label(ct_root,text='Settings',font="Algerian 20").grid(row=0,column=0,columnspan=2,pady=(12,25),padx=20)
+    Label(ct_root, text='Settings', font="Algerian 20").grid(
+        row=0, column=0, columnspan=2, pady=(12, 25), padx=20)
 
+    Label(ct_root, text='Stocks  ').grid(row=1, column=0, sticky=W)
+    stock_entry = Entry(ct_root, width=30)
+    stock_entry.insert(END, current_default["tickerlist"])
+    stock_entry.grid(row=1, column=1)
 
-    Label(ct_root,text='Stocks  ').grid(row=1,column=0,sticky=W)
-    stock_entry=Entry(ct_root,width=30)
-    stock_entry.insert(END,current_default["tickerlist"])
-    stock_entry.grid(row=1,column=1)
-
-
-
-    Label(ct_root,text='Theme  ').grid(row=2,column=0,sticky=W)
-    th_val=StringVar()
+    Label(ct_root, text='Theme  ').grid(row=2, column=0, sticky=W)
+    th_val = StringVar()
 
     th_val.set(str(current_default["colormode"]))
 
     print(th_val.get())
-    th_menu=OptionMenu(ct_root, th_val,"Light","Dark","Auto")
-    th_menu.grid(row=2,column=1)
+    th_menu = OptionMenu(ct_root, th_val, "Light", "Dark", "Auto")
+    th_menu.grid(row=2, column=1)
 
     def save_changes():
-        ans = messagebox.askokcancel("Confirmaton","Confirm changes ?")
-        if ans :
+        ans = messagebox.askokcancel("Confirmaton", "Confirm changes ?")
+        if ans:
 
             print(current_default)
             current_default["tickerlist"] = stock_entry.get().split(" ")
             current_default["colormode"] = str(th_val.get())
 
-            
-            a=current_default['tickerlist']
-            if len(a)>5:
-                s=messagebox.askokcancel("Interruption ",'Accept only the first 5 stocks? ')
-                if not(s):
+            a = current_default['tickerlist']
+            if len(a) > 5:
+                s = messagebox.askokcancel(
+                    "Interruption ", 'Accept only the first 5 stocks? ')
+                if not (s):
                     return
-                
+
                 else:
-                    b=a[0:5]
+                    b = a[0:5]
 
                     print(b)
-                        
-                    current_default["tickerlist"]=b
 
-        
-            with open("user_custom.json",'w') as setting:
-                json.dump(current_default,setting,indent=4)
+                    current_default["tickerlist"] = b
+
+            with open("user_custom.json", 'w') as setting:
+                json.dump(current_default, setting, indent=4)
             print(current_default)
             ct_root.destroy()
             root.destroy()
             os.execl(sys.executable, 'python', __file__)
-            
+
         else:
             return
-            
-    cb=Button(ct_root,text="Cancel",command=ct_root.destroy)
-    cb.grid(row=4,column=0)
-    sb=Button(ct_root,text="Save",command=save_changes)
-    sb.grid(row=4,column=1)
 
+    cb = Button(ct_root, text="Cancel", command=ct_root.destroy)
+    cb.grid(row=4, column=0)
+    sb = Button(ct_root, text="Save", command=save_changes)
+    sb.grid(row=4, column=1)
 
-    ct_root.mainloop() 
+    ct_root.mainloop()
 
 
 stockdownloadlist = {}
 flagdaynight = True
 colormode = 1
 
-    
+
 if __name__ == '__main__':  # this is the main function of the program
-    with open("user_custom.json",'r') as setting:
+    with open("user_custom.json", 'r') as setting:
         current_default = json.load(setting)
         tickerlist = current_default["tickerlist"]
         color = current_default["colormode"]
-        if color.lower()=='dark':
-            colormode=1
-        elif color.lower()=='light':
-            colormode=-1
+        if color.lower() == 'dark':
+            colormode = 1
+        elif color.lower() == 'light':
+            colormode = -1
         else:
-            colormode=0
+            colormode = 0
 
-
-    
     print("Collecting data from the internet. Please Wait...")
     mkdir_p("assets")
     # gets information from the location file
@@ -175,7 +172,7 @@ if __name__ == '__main__':  # this is the main function of the program
     root.title("Widget Panel")
     root.configure(bg=bgcol)
     #bgp = PhotoImage(file = "/Users/uchitnm/Workspace/GROUP_WORK/newspy/bgp.png")
-    #Label(root,image=bgp).place(x=0,y=0)
+    # Label(root,image=bgp).place(x=0,y=0)
     # Frames
 
     # frame for daytime
@@ -190,12 +187,12 @@ if __name__ == '__main__':  # this is the main function of the program
 
     # frame for calander
     framecal = Frame(master=root)
-    framecal.grid(row=0, column=3, rowspan=9, pady=(0,0), sticky='n')
+    framecal.grid(row=0, column=3, rowspan=9, pady=(0, 0), sticky='n')
     framecal.config(bg=bgcol)
 
     # frame for stocks
     framestock = Frame(root)
-    framestock.grid(row=1, column=0, columnspan=1,sticky="n")
+    framestock.grid(row=1, column=0, columnspan=1, sticky="n")
     framestock.configure(bg=bgcol)
 
     framenews = Frame(root)
@@ -250,16 +247,17 @@ if __name__ == '__main__':  # this is the main function of the program
     print(f"Collecting data for {len(tickerlist)} stock ticker(s)...")
 
     # calls stock function within stock file to load stock data into the stock labels
-    rownum=stock.stock(tickerlist, framestock, bgcol, fgcol, yf,
-                stockdownloadlist, flagdaynight, rownumgraph)+1
+    rownum = stock.stock(tickerlist, framestock, bgcol, fgcol, yf,
+                         stockdownloadlist, flagdaynight, rownumgraph)+1
 
     # News data
     news.newsparse(framenews, bgcol, fgcol, country_code)
 
     # currency converter and exchange rates
-    framecc = Frame(framestock, highlightbackground=fgcol, highlightthickness=2,width=350)
-    framecc.grid(row=rownum, column=0, columnspan=3,pady=(25,0))
-    framecc.configure(bg=bgcol,width=350)
+    framecc = Frame(framestock, highlightbackground=fgcol,
+                    highlightthickness=2, width=350)
+    framecc.grid(row=rownum, column=0, columnspan=3, pady=(25, 0))
+    framecc.configure(bg=bgcol, width=350)
 
     # Menu bar for options and help
     menuBar = Menu(root)
@@ -270,7 +268,7 @@ if __name__ == '__main__':  # this is the main function of the program
     MENU1.add_command(label='Detailed Information (Exachange rates)',
                       command=Currency_Wigide_manager.DETAILS)
     MENU1.add_separator()
-    MENU1.add_command(label="Exit",command=exit)
+    MENU1.add_command(label="Exit", command=exit)
     root.config(menu=menuBar)
 
     # variable to hold input amount
@@ -294,17 +292,20 @@ if __name__ == '__main__':  # this is the main function of the program
         choices = json.load(fileObj)
 
     # From country name label and dropdown
-    Label(framecc, text="From: ", bg=bgcol,font='Banschrift 13', fg=fgcol).grid(row=rownum-1, column=0, padx=55,pady=(0,0))
+    Label(framecc, text="From: ", bg=bgcol, font='Banschrift 13',
+          fg=fgcol).grid(row=rownum-1, column=0, padx=55, pady=(0, 0))
     MenuFrom = OptionMenu(framecc, choice_from, *choices)
-    MenuFrom.grid(row=rownum, column=0, padx=(0,35))
+    MenuFrom.grid(row=rownum, column=0, padx=(0, 35))
 
     # To country name label and dropdown
-    Label(framecc, text="To: ", bg=bgcol,font='Banschrift 13',fg=fgcol).grid(row=rownum-1, column=1,pady=(0,0),padx=55)
+    Label(framecc, text="To: ", bg=bgcol, font='Banschrift 13', fg=fgcol).grid(
+        row=rownum-1, column=1, pady=(0, 0), padx=55)
     MenuTo = OptionMenu(framecc, choice_to, *choices)
-    MenuTo.grid(row=rownum, column=1, padx=(0,0))
+    MenuTo.grid(row=rownum, column=1, padx=(0, 0))
 
     # Input amount label and dropdown
-    Label(framecc, text="Amount: ", bg=bgcol,fg=fgcol).grid(row=rownum+1, column=0,padx=(0,35))
+    Label(framecc, text="Amount: ", bg=bgcol, fg=fgcol).grid(
+        row=rownum+1, column=0, padx=(0, 35))
 
     # Click action on the entry box
     def click(event):
@@ -325,7 +326,7 @@ if __name__ == '__main__':  # this is the main function of the program
 
     # Entry box for the amount
     input_entry = Entry(framecc, textvariable=amount, width=15, bg=fgcol)
-    input_entry.grid(row=rownum+1, column=0, columnspan=1, padx=(0,35))
+    input_entry.grid(row=rownum+1, column=0, columnspan=1, padx=(0, 35))
 
     input_entry.insert(0, 'Currency value.')
     input_entry.config(state=DISABLED)
@@ -335,12 +336,12 @@ if __name__ == '__main__':  # this is the main function of the program
     input_entry.bind('<Leave>', unclick)
 
     # Result output Label
-    result_label = Label(framecc, bg=bgcol,font=('Banschrift',13),fg=fgcol)
+    result_label = Label(framecc, bg=bgcol, font=('Banschrift', 13), fg=fgcol)
     result_label.grid(row=rownum+2, column=0, columnspan=2)
 
     # Convert action button
-    Cal_button = Button(framecc, text="Convert", bg=bgcol,fg=fgcol, command=lambda: Currency_Wigide_manager.convert(
-        amt=amount, result_L=result_label, toChoice=choice_to, fromChoice=choice_from,FG=fgcol,BG=bgcol))
+    Cal_button = Button(framecc, text="Convert", bg=bgcol, fg=fgcol, command=lambda: Currency_Wigide_manager.convert(
+        amt=amount, result_L=result_label, toChoice=choice_to, fromChoice=choice_from, FG=fgcol, BG=bgcol))
     Cal_button.grid(row=rownum+1, column=1)
 
     # Calendar Widgets
@@ -368,7 +369,8 @@ if __name__ == '__main__':  # this is the main function of the program
             row=2, column=0, sticky=S)
 
         E_Wid.mainloop()
-    res_l = Text(master=framecal, width=32, height=17, font="Courier 14",bg=bgcol,fg=fgcol)
+    res_l = Text(master=framecal, width=32, height=17,
+                 font="Courier 14", bg=bgcol, fg=fgcol)
     res_l.grid(row=2, column=0, columnspan=3, sticky=W)
 
     def ADDevent(date):
@@ -441,27 +443,27 @@ if __name__ == '__main__':  # this is the main function of the program
     cal.grid(row=0, column=0, sticky=W, columnspan=3)
 
     def listing_SELDATE(date):
-            try:
-                date = str(date)
-                res_l.config(state=NORMAL)
-                res_l.delete("1.0", END)
-                # print(date)
-                with open('reminder.json', 'r', encoding="utf8") as f:
-                    rem = json.load(f)
-                if (not (rem)) or (date not in rem) or (not (rem[date])):
-                    res_l.insert(END, "No Plans.")
-                elif date in rem:
-                    s = ""
-                    for j in rem[date]:
-                        s += f"{date}:{j}\n"
+        try:
+            date = str(date)
+            res_l.config(state=NORMAL)
+            res_l.delete("1.0", END)
+            # print(date)
+            with open('reminder.json', 'r', encoding="utf8") as f:
+                rem = json.load(f)
+            if (not (rem)) or (date not in rem) or (not (rem[date])):
+                res_l.insert(END, "No Plans.")
+            elif date in rem:
+                s = ""
+                for j in rem[date]:
+                    s += f"{date}:{j}\n"
 
-                    res_l.insert(END, s)
-                    res_l.config(state=DISABLED)
+                res_l.insert(END, s)
+                res_l.config(state=DISABLED)
 
-                Timer(1, lambda: listing_SELDATE(cal.selection_get())).start()
-            except Exception:
-               pass 
-        
+            Timer(1, lambda: listing_SELDATE(cal.selection_get())).start()
+        except Exception:
+            pass
+
     listing_SELDATE(cal.selection_get())
 
     with open('reminder.json', 'r', encoding="utf8") as f:
@@ -470,15 +472,16 @@ if __name__ == '__main__':  # this is the main function of the program
 
     choice_what = StringVar()
     choice_what.set("Add Event")
-    functions = {"Add Event": ADDevent.__name__,"List all Events": LISTevents.__name__, "Delete Event": DELevent.__name__}
+    functions = {"Add Event": ADDevent.__name__,
+                 "List all Events": LISTevents.__name__, "Delete Event": DELevent.__name__}
     Label(framecal, text="Chose the Action :").grid(row=1, column=0, sticky=W)
     MenuFrom = OptionMenu(framecal, choice_what, *functions.keys())
     MenuFrom.grid(column=1, row=1, sticky=W)
-    event_caller = Button(framecal, text="OK", command=lambda: eval(f"{functions[choice_what.get()]}(cal.selection_get())"))
+    event_caller = Button(framecal, text="OK", command=lambda: eval(
+        f"{functions[choice_what.get()]}(cal.selection_get())"))
     event_caller.grid(row=1, column=2, sticky='e')
 
     # framecal.bind('<Return>', lambda _: eval(f"{functions[choice_what.get()]}(cal.selection_get())"))
     # root.bind('<Return>', lambda _: eval(f"{functions[choice_what.get()]}(cal.selection_get())"))
 
     root.mainloop()
-
