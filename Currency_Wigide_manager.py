@@ -22,7 +22,7 @@ def DETAILS():
 
 def convert(amt,result_L,toChoice,fromChoice,BG,FG):
     # print(str(choice_to.get()))
-    if str(amt.get()) == "Currency value.":
+    if str(amt.get()) == "Currency value." or str(amt.get()) == "0" :
         amt.set("1")
     con_url = f"https://api.apilayer.com/fixer/convert?to={str(toChoice.get())}&from={str(fromChoice.get())}&amount={str(amt.get())}"
     symbolsCurrencyJson = requests.get(
@@ -33,9 +33,9 @@ def convert(amt,result_L,toChoice,fromChoice,BG,FG):
     response = requests.request("GET", con_url, headers=headers)
 
     result = response.json()
-    if str(amt.get()) == "Currency value.":
+    if str(amt.get()) == "Currency value":
         amt.set("1")
         txt=f'Current Exchange rates: { symbolsCurrencyJson[str(toChoice.get())]["symbol"] } {str(result["result"])}'
     else:
-        txt=symbolsCurrencyJson[str(toChoice.get())]["symbol"]+" "+str(result["result"])
+        txt="Converted amt : "+ symbolsCurrencyJson[str(toChoice.get())]["symbol"]+" "+str(result["result"])
     result_L.config(text=txt,bg=BG,fg=FG)

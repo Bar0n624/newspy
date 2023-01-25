@@ -269,6 +269,9 @@ if __name__ == '__main__':  # this is the main function of the program
                       command=Currency_Wigide_manager.DETAILS)
     MENU1.add_separator()
     MENU1.add_command(label="Exit", command=exit)
+    MENU1.add_separator()
+    MENU1.add_command(label="About", command=lambda : messagebox.showinfo("About","Project by :\n Suyog \n Uchit \n Varun"))
+    root.config(menu=menuBar)
     root.config(menu=menuBar)
 
     # variable to hold input amount
@@ -325,7 +328,7 @@ if __name__ == '__main__':  # this is the main function of the program
             input_entry.config(state=DISABLED)
 
     # Entry box for the amount
-    input_entry = Entry(framecc, textvariable=amount, width=15, bg=fgcol)
+    input_entry = Entry(framecc, textvariable=amount, width=15, bg=bgcol)
     input_entry.grid(row=rownum+1, column=0, columnspan=1, padx=(0, 35))
 
     input_entry.insert(0, 'Currency value.')
