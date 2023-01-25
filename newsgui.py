@@ -270,7 +270,8 @@ if __name__ == '__main__':  # this is the main function of the program
     MENU1.add_separator()
     MENU1.add_command(label="Exit", command=exit)
     MENU1.add_separator()
-    MENU1.add_command(label="About", command=lambda : messagebox.showinfo("About","Project by :\n Suyog \n Uchit \n Varun"))
+    MENU1.add_command(label="About", command=lambda: messagebox.showinfo(
+        "About", "Project by :\n Suyog \n Uchit \n Varun"))
     root.config(menu=menuBar)
     root.config(menu=menuBar)
 
